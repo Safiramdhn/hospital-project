@@ -1,11 +1,12 @@
 'use strict';
 const bcrypt = require("bcrypt");
-const { update } = require("../models/employeeModel");
-
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
+    // Reset auto-increment value
+    await queryInterface.sequelize.query('ALTER TABLE Employees AUTO_INCREMENT = 1;');
+
     // Add seed data
     const hashedPassword = await bcrypt.hash('password123', 10);  // Hash the password using bcrypt
     await queryInterface.bulkInsert('Employees', [
@@ -27,8 +28,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    // Remove all seed data
     await queryInterface.bulkDelete('Employees', null, {});
-    await queryInterface.sequelize.query('ALTER TABLE Employees AUTO_INCREMENT = 1');
-  },
+  }
 };

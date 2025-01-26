@@ -1,5 +1,5 @@
 const { Model, DataTypes } = require("sequelize");
-const sequelize = require("../config/database");
+const db = require("../config/database");
 const bcrypt = require("bcrypt");
 
 class Employee extends Model {}
@@ -12,7 +12,7 @@ Employee.init(
     password: { type: DataTypes.STRING, allowNull: false },
   },
   {
-    sequelize,
+    sequelize: db,
     modelName: 'Employee',
     hooks: {
       beforeCreate: async (employee, options) => {
@@ -23,6 +23,15 @@ Employee.init(
     },
     timestamps: true,  // This is required for Sequelize to handle `createdAt` and `updatedAt`
     underscored: true, // Use snake_case for timestamps
+    paranoid: true, //enable soft deletes
+    defaultScope: {
+        attributes: { exclude: ['deleted_at'] }
+    },
+    scopes: {
+        includeDeleted: {
+            attributes: []
+        }
+    }
   }
 );
 

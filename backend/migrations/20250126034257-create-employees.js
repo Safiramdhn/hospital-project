@@ -23,7 +23,8 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.fn('NOW'), // Sets default value to current timestamp
-      }
+      },
+      deleted_at: { type: Sequelize.DATE, allowNull: true },
     });
 
     // await queryInterface.addColumn('Employees', 'createdAt', {
