@@ -303,4 +303,68 @@ router.get('/:id', authMiddleware, patientController.getPatientById);
  */
 router.post('/', authMiddleware, patientController.createPatient);
 
+/**
+ * @swagger
+ * /patient/:
+ *   put:
+ *     summary: Update a patient
+ *     description: Update the details of an existing patient.
+ *     tags: [Patient]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               age:
+ *                 type: integer
+ *               address:
+ *                 type: string
+ *             example:
+ *               name: John Doe
+ *               age: 30
+ *               address: 123 Main St
+ *     responses:
+ *       200:
+ *         description: Patient updated successfully
+ *       400:
+ *         description: Invalid input
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Patient not found
+ */
+router.put('/', authMiddleware, patientController.updatePatient);
+
+/**
+ * @swagger
+ * /patient/{id}:
+ *   delete:
+ *     summary: Delete a patient
+ *     description: Delete a patient by ID.
+ *     tags: [Patient]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The patient ID
+ *     responses:
+ *       200:
+ *         description: Patient deleted successfully
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Patient not found
+ */
+router.delete('/:id', authMiddleware, patientController.deletePatient);
+
 module.exports = router;

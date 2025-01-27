@@ -1,13 +1,10 @@
-const { Patient, PatientPersonalInfo, PatientSocialData, PatientEmergencyContact } = require('../models/patients');
-const moment = require('moment');
-const crypto = require('crypto');
-const Sequelize = require('sequelize');
+const patientService = require('../services/patientService');
 const logger = require('../utils/logger');
 
 // Get a list of patients
 const getAllPatients = async (req, res) => {
   try {
-    const patients = await Patient.findAll();
+    const patients = await patientService.getAllPatients();
 
     logger.info('Successfully retrieved all patients');
     res.status(200).json(patients);
@@ -20,19 +17,12 @@ const getAllPatients = async (req, res) => {
 const getPatientById = async (req, res) => {
   const id = req.params.id;
   if (!id) {
-    res.status(400).json({ message: 'Patient ID is required' });
-    return res.status(400).json({ message: 'Invalid patient ID' });
+    return res.status(400).json({ message: 'Patient ID is required' });
   }
   // change id to integer value
   const patientId = parseInt(id);
   try {
-    const patient = await Patient.findByPk(patientId, {
-      include: [
-        { model: PatientPersonalInfo, as: 'personal_information' },
-        { model: PatientSocialData, as: 'social_data' },
-        { model: PatientEmergencyContact, as: 'emergency_contact'},
-      ],
-    });
+    const patient = await patientService.getPatientByIdService(patientId);
     if (!patient) {
       logger.error('Patient not found');
       return res.status(404).json({ message: 'Patient not found' });
@@ -46,21 +36,9 @@ const getPatientById = async (req, res) => {
 
 // find by patient credentials
 const findPatientByCredentials = async (req, res) => {
+  const { patient_credential } = req.body;
   try {
-    const { patient_credential } = req.body;
-
-    // Validate input
-    if (!patient_credential || patient_credential === '') {
-      logger.error('Invalid patient_credential value');
-      return res.status(400).json({ message: 'patient_credential is required and must be a valid number.' });
-    }
-
-    // Query the database using Sequelize OR condition
-    const patient = await Patient.findOne({
-      where: {
-        [Sequelize.Op.or]: [{ ktp_number: patient_credential }, { mr_number: patient_credential }],
-      },
-    });
+    const patient = await patientService.getPatientByCredentialService(patient_credential);
 
     if (!patient) {
       logger.error('Patient not found');
@@ -70,14 +48,13 @@ const findPatientByCredentials = async (req, res) => {
     logger.info('Successfully retrieved patient by credentials');
     return res.status(200).json({ patient });
   } catch (error) {
-    logger.error('Error creating patient:', error.message);
+    logger.error('Error retrieving patient:', error.message);
     return res.status(500).json({ message: 'Internal server error.' });
   }
 };
 
 //   create new patient
 const createPatient = async (req, res) => {
-  const transaction = await Patient.sequelize.transaction();
   let { patient, personalInfo, socialData, emergencyContact } = req.body;
 
   try {
@@ -89,46 +66,58 @@ const createPatient = async (req, res) => {
 
     patient.employee_id = req.user.id; // Set the employee_id from the token
 
-    const hashedKtp = crypto.createHash('sha256').update(patient.ktp_number).digest('hex');
-    patient.mr_number = `${moment().format('YYYYMMDD')}-${patient.employee_id}-${hashedKtp.substring(0, 8)}`;
+    const createdPatient = await patientService.createPatientService(patient, personalInfo, socialData, emergencyContact);
 
-    // Create the patient record
-    const createdPatient = await Patient.create(patient, { transaction });
-
-    personalInfo.id_number = patient.ktp_number;
-    await PatientPersonalInfo.create(
-      {
-        ...personalInfo,
-        patient_id: createdPatient.id,
-      },
-      { transaction }
-    );
-
-    socialData.mr_date = moment().format('YYYY-MM-DD');
-    await PatientSocialData.create(
-      {
-        ...socialData,
-        patient_id: createdPatient.id,
-      },
-      { transaction }
-    );
-
-    if (emergencyContact && emergencyContact.phone_number !== 0) {
-      await PatientEmergencyContact.create(
-        {
-          ...emergencyContact,
-          patient_id: createdPatient.id,
-        },
-        { transaction }
-      );
-    }
-
-    await transaction.commit();
-    logger.info('Patient successfully created with ID', patient.id);
+    logger.info('Patient successfully created with ID', createdPatient.id);
     res.status(201).json({ message: 'Patient successfully created' });
   } catch (error) {
     await transaction.rollback();
     logger.error('Error creating patient:', error.message);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+//   update patient
+const updatePatient = async (req, res) => {
+  const id = req.params.id;
+  if (!id) {
+    return res.status(400).json({ message: 'Patient ID is required' });
+  }
+
+  let { patient, personalInfo, socialData, emergencyContact } = req.body;
+  try {
+    const patientId = parseInt(id);
+    const updatedPatient = await patientService.updatePatientService(patientId, patient, personalInfo, socialData, emergencyContact);
+    if (!updatedPatient) {
+      logger.error('Patient not found');
+      return res.status(404).json({ message: 'Patient not found' });
+    }
+    logger.info('Patient successfully updated with ID', patientId);
+    res.status(200).json({ message: 'Patient successfully updated' });
+  } catch (error) {
+    logger.error('Error updating patient:', error.message);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+//   delete patient
+const deletePatient = async (req, res) => {
+  const id = req.params.id;
+  if (!id) {
+    res.status(400).json({ message: 'Patient ID is required' });
+    return res.status(400).json({ message: 'Invalid patient ID' });
+  }
+  try {
+    const patientId = parseInt(id);
+    const deletedPatient = await patientService.deletePatient(patientId);
+    if (!deletedPatient) {
+      logger.error('Patient not found');
+      return res.status(404).json({ message: 'Patient not found' });
+    }
+    logger.info('Patient successfully deleted with ID', patientId);
+    res.status(200).json({ message: 'Patient successfully deleted' });
+  } catch (error) {
+    logger.error('Error deleting patient:', error.message);
     res.status(500).json({ message: error.message });
   }
 };
@@ -138,4 +127,6 @@ module.exports = {
   getPatientById,
   findPatientByCredentials,
   createPatient,
+  updatePatient,
+  deletePatient,
 };
