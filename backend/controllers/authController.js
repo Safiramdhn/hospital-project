@@ -1,4 +1,4 @@
-const Employee = require('../models/employeeModel');
+const User = require('../models/users/index');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -8,7 +8,7 @@ const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const employee = await Employee.findOne({ where: { email } });
+    const employee = await User.Employee.findOne({ where: { email } });
 
     if (!employee) {
       return res.status(401).json({ message: 'Invalid email or password' });

@@ -5,11 +5,11 @@ const bcrypt = require("bcrypt");
 module.exports = {
   async up(queryInterface, Sequelize) {
     // Reset auto-increment value
-    await queryInterface.sequelize.query('ALTER TABLE Employees AUTO_INCREMENT = 1;');
+    await queryInterface.sequelize.query('ALTER TABLE employees AUTO_INCREMENT = 1;');
 
     // Add seed data
     const hashedPassword = await bcrypt.hash('password123', 10);  // Hash the password using bcrypt
-    await queryInterface.bulkInsert('Employees', [
+    await queryInterface.bulkInsert('employees', [
       {
         name: 'John Doe',
         email: 'john.doe@example.com',
@@ -28,6 +28,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('Employees', null, {});
+    await queryInterface.bulkDelete('employees', null, {});
   }
 };

@@ -9,21 +9,16 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    await queryInterface.createTable('patient_emergency_contacts', {
+
+    await queryInterface.createTable('outpatient_registrations', {
       id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
-      patient_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Patients',
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      },
-      contact_name: { type: Sequelize.STRING, allowNul: false },
-      phone_number: { type: Sequelize.STRING, allowNul: false },
-      address: { type: Sequelize.STRING, allowNul: false },
-      city: { type: Sequelize.STRING, allowNul: false },
+      patient_id: { type: Sequelize.INTEGER, references: { model: 'patients', key: 'id' } },
+      registration_number: { type: Sequelize.STRING, unique: true, allowNull: false },
+      booking_number: { type: Sequelize.STRING, unique: true, allowNull: false },
+      session: { type: Sequelize.ENUM('Fullday', 'Halfday') },
+      visit_date: { type: Sequelize.DATE, allowNull: false },
+      last_visit: { type: Sequelize.DATE, allowNull: false },
+      notes: { type: Sequelize.STRING, allowNull: true },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -32,7 +27,7 @@ module.exports = {
       updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
+        defaultValue: Sequelize.fn('NOW'), // Sets default value to current timestamp
       },
       deleted_at: { type: Sequelize.DATE, allowNull: true },
     });

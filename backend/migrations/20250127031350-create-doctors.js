@@ -9,21 +9,11 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    await queryInterface.createTable('patient_emergency_contacts', {
+    await queryInterface.createTable('doctors', {
       id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
-      patient_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Patients',
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      },
-      contact_name: { type: Sequelize.STRING, allowNul: false },
-      phone_number: { type: Sequelize.STRING, allowNul: false },
-      address: { type: Sequelize.STRING, allowNul: false },
-      city: { type: Sequelize.STRING, allowNul: false },
+      name: { type: Sequelize.STRING, allowNull: false },
+      code: { type: Sequelize.STRING, allowNull: false, unique: true },
+      clinic_id: { type: Sequelize.INTEGER, references: { model: 'clinics', field: 'id' } },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -32,10 +22,12 @@ module.exports = {
       updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
+        defaultValue: Sequelize.fn('NOW'), // Sets default value to current timestamp
       },
       deleted_at: { type: Sequelize.DATE, allowNull: true },
     });
+
+    await queryInterface.addIndex('doctors', ['code'], { unique: true });
   },
 
   async down(queryInterface, Sequelize) {
@@ -45,5 +37,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
+    await queryInterface.removeIndex('doctors', 'code');
   },
 };

@@ -19,25 +19,13 @@ module.exports = {
         allowNull: false,
         defaultValue: Sequelize.fn('NOW'), // Sets default value to current timestamp
       },
-      updated_at:{
+      updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.fn('NOW'), // Sets default value to current timestamp
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
       },
       deleted_at: { type: Sequelize.DATE, allowNull: true },
     });
-
-    // await queryInterface.addColumn('Employees', 'createdAt', {
-    //   type: Sequelize.DATE,
-    //   allowNull: false,
-    //   defaultValue: Sequelize.fn('NOW'), // Sets default value to current timestamp
-    // });
-
-    // await queryInterface.addColumn('Employees', 'updatedAt', {
-    //   type: Sequelize.DATE,
-    //   allowNull: false,
-    //   defaultValue: Sequelize.fn('NOW'), // Sets default value to current timestamp
-    // });
   },
 
   async down (queryInterface, Sequelize) {
@@ -47,6 +35,5 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-    await queryInterface.dropTable('employees');
   }
 };

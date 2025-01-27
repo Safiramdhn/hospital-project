@@ -9,25 +9,50 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    await queryInterface.createTable('patient_emergency_contacts', {
+    await queryInterface.createTable('billing_details', {
       id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
-      patient_id: {
+      registration_id: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
-          model: 'Patients',
+          model: 'outpatient_registrations',
           key: 'id',
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      contact_name: { type: Sequelize.STRING, allowNul: false },
-      phone_number: { type: Sequelize.STRING, allowNul: false },
-      address: { type: Sequelize.STRING, allowNul: false },
-      city: { type: Sequelize.STRING, allowNul: false },
+      treatment: {
+        type: Sequelize.STRING(50),
+        allowNull: true,
+      },
+      registration_fee: {
+        type: Sequelize.DECIMAL(10, 2),
+        allowNull: true,
+      },
+      examination_fee: {
+        type: Sequelize.DECIMAL(10, 2),
+        allowNull: true,
+      },
+      total_fee: {
+        type: Sequelize.DECIMAL(10, 2),
+        allowNull: true,
+      },
+      discount: {
+        type: Sequelize.DECIMAL(10, 2),
+        allowNull: true,
+      },
+      total_payment: {
+        type: Sequelize.DECIMAL(10, 2),
+        allowNull: true,
+      },
+      amount_due: {
+        type: Sequelize.DECIMAL(10, 2),
+        allowNull: true,
+      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.fn('NOW'), // Sets default value to current timestamp
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
       updated_at: {
         type: Sequelize.DATE,
