@@ -28,15 +28,5 @@ module.exports = {
     });
 
     await queryInterface.addIndex('doctors', ['code'], { unique: true });
-  },
-
-  async down(queryInterface, Sequelize) {
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     */
-    await queryInterface.removeIndex('doctors', 'code');
-  },
+  }
 };
