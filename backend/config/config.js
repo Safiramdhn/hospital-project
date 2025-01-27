@@ -1,4 +1,5 @@
 require('dotenv').config(); // Load environment variables from .env file
+const logger = require('../utils/logger'); // Load logger
 
 module.exports = {
   development: {
@@ -7,6 +8,9 @@ module.exports = {
     database: process.env.DB_NAME || "yourdatabase",
     host: process.env.DB_HOST || "127.0.0.1",
     dialect: "mysql",
+    logging: (query) => {
+      logger.info(`Executing query: ${query.sql}`);
+    },
   },
   test: {
     username: process.env.DB_USER || "root",
@@ -14,6 +18,7 @@ module.exports = {
     database: process.env.DB_NAME || "database_test",
     host: process.env.DB_HOST || "127.0.0.1",
     dialect: "mysql",
+    logging: false,
   },
   production: {
     username: process.env.DB_USER,
@@ -21,5 +26,6 @@ module.exports = {
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
     dialect: "mysql",
+    logging: false,
   },
 };
