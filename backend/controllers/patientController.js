@@ -26,7 +26,13 @@ const getPatientById = async (req, res) => {
   // change id to integer value
   const patientId = parseInt(id);
   try {
-    const patient = await Patient.findByPk(patientId);
+    const patient = await Patient.findByPk(patientId, {
+      include: [
+        { model: PatientPersonalInfo, as: 'personal_information' },
+        { model: PatientSocialData, as: 'social_data' },
+        { model: PatientEmergencyContact, as: 'emergency_contact'},
+      ],
+    });
     if (!patient) {
       logger.error('Patient not found');
       return res.status(404).json({ message: 'Patient not found' });

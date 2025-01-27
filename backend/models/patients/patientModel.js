@@ -1,12 +1,13 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../../config/database');
+const Employee = require('../users/employeeModel');
 
 class Patient extends Model {}
 
 Patient.init(
   {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-    mr_number: { type: DataTypes.STRING, allowNull: false},
+    mr_number: { type: DataTypes.STRING, allowNull: false },
     ktp_number: { type: DataTypes.STRING, allowNull: false },
     first_name: { type: DataTypes.STRING, allowNull: false },
     last_name: { type: DataTypes.STRING, allowNull: false },
@@ -37,5 +38,11 @@ Patient.init(
     },
   }
 );
+
+Patient.belongsTo(Employee, { foreignKey: 'employee_id', as: 'employee' });
+Employee.hasMany(Patient, { foreignKey: 'employee_id' });
+
+// sync table with database, if not exists, create it. This will automatically create indexes and foreign keys. 1:M relationship between Patient and Employee.
+Patient.sync();
 
 module.exports = Patient;

@@ -1,5 +1,6 @@
 const { Model, DataTypes } = require('sequelize');
 const db = require('../../config/database');
+const Patient = require('./patientModel');
 
 class PatientEmergencyContact extends Model {}
 
@@ -37,5 +38,10 @@ PatientEmergencyContact.init(
     },
   }
 );
+
+PatientEmergencyContact.belongsTo(Patient, { foreignKey: 'patient_id', as: 'patient' });
+Patient.hasOne(PatientEmergencyContact, { foreignKey: 'patient_id', as: 'emergency_contact' });
+
+PatientEmergencyContact.sync();
 
 module.exports = PatientEmergencyContact;
