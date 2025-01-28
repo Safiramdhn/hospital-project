@@ -10,7 +10,7 @@ const getAllTariffReferences = async (req, res) => {
     logger.info('Successfully retrieved all tariff references');
     res.status(200).json(tariffReferences);
   } catch (error) {
-    logger.error('Error retrieving tariff references:', error.message);
+    logger.error(`Error retrieving tariff references: ${error.message}`);
     res.status(500).json({ message: error.message });
   }
 };

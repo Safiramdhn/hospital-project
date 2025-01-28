@@ -9,7 +9,7 @@ const getAll = async () => {
         }
         return tariffs
     } catch (error) {
-        throw new Error('Could not retrieve tariffs', error);
+        throw new Error(`Could not retrieve tariffs ${error.message}`);
     }
 }
 

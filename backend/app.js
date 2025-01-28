@@ -35,6 +35,6 @@ app.use('/api/employee', employeeRoutes);
 sequelize
   .authenticate()
   .then(() => console.log('Database connected'))
-  .catch((err) => console.error('Unable to connect to database:', err));
+  .catch((error) => console.error('Unable to connect to database:', error));
 
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

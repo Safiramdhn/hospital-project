@@ -10,7 +10,7 @@ const getAllDoctors = async (req, res) => {
     logger.info('Successfully retrieved all doctors');
     res.status(200).json(doctors);
   } catch (error) {
-    logger.error('Error retrieving all doctors:', error.message);
+    logger.error(`Error retrieving all doctors: ${error.message}`);
     res.status(500).json({ message: error.message });
   }
 };

@@ -9,6 +9,7 @@ const getAllPatients = async (req, res) => {
     logger.info('Successfully retrieved all patients');
     res.status(200).json(patients);
   } catch (error) {
+    logger.error(`Error retrieving patients: ${error.message}`);
     res.status(500).json({ message: error.message });
   }
 };
@@ -39,7 +40,7 @@ const getPatientById = async (req, res) => {
     res.status(200).json(patient);
   } catch (error) {
     // Handle server errors
-    logger.error('Error retrieving patient:', error.message);
+    logger.error(`Error retrieving patient: ${error.message}`);
     res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 };
@@ -58,7 +59,7 @@ const findPatientByCredentials = async (req, res) => {
     logger.info('Successfully retrieved patient by credentials');
     return res.status(200).json({ patient });
   } catch (error) {
-    logger.error('Error retrieving patient:', error.message);
+    logger.error(`Error retrieving patient: ${error.message}`);
     return res.status(500).json({ message: 'Internal server error.' });
   }
 };
@@ -73,6 +74,7 @@ const createPatient = async (req, res) => {
       logger.error('User authentication required');
       throw new Error('Employee ID is missing in the request.');
     }
+    console.log('User authentication, user: ' + req.user.id);
 
     patient.employee_id = req.user.id; // Set the employee_id from the token
 
@@ -81,8 +83,7 @@ const createPatient = async (req, res) => {
     logger.info('Patient successfully created with ID', createdPatient.id);
     res.status(201).json({ message: 'Patient successfully created' });
   } catch (error) {
-    await transaction.rollback();
-    logger.error('Error creating patient:', error.message);
+    logger.error(`Error creating patient: ${error.message}`);
     res.status(500).json({ message: error.message });
   }
 };
@@ -103,15 +104,16 @@ const updatePatient = async (req, res) => {
     }
 
     patient.employee_id = req.user.id; // Set the employee_id from the token
+    console.log(patient.employee_id);
     const updatedPatient = await patientService.updatePatientService(patientId, patient, personalInfo, socialData, emergencyContact);
     if (!updatedPatient) {
       logger.error('Patient not found');
       return res.status(404).json({ message: 'Patient not found' });
     }
     logger.info('Patient successfully updated with ID', patientId);
-    res.status(200).json({ message: 'Patient successfully updated'. updatePatient });
+    res.status(200).json({ message: 'Patient successfully updated' });
   } catch (error) {
-    logger.error('Error updating patient:', error.message);
+    logger.error(`Error updating patient: ${error.message}`);
     res.status(500).json({ message: error.message });
   }
 };
@@ -133,7 +135,7 @@ const deletePatient = async (req, res) => {
     logger.info('Patient successfully deleted with ID', patientId);
     res.status(200).json({ message: 'Patient successfully deleted' });
   } catch (error) {
-    logger.error('Error deleting patient:', error.message);
+    logger.error(`Error deleting patient: ${error.message}`);
     res.status(500).json({ message: error.message });
   }
 };

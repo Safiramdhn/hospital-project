@@ -478,61 +478,91 @@ router.get('/:id', authMiddleware, patientController.getPatientById);
  *                  schema:
  *                      type: object
  *                      properties:
- *                          register:
+ *                          patient:
  *                              type: object
  *                              properties:
- *                                  patient_id: 
- *                                      type: integer
- *                                      example: 1
- *                                  session:
- *                                      type: string
- *                                      example: Fullday
- *                                  notes:
- *                                      type: string
- *                                      example: Kontrol rutin
- *                                  visit_date:
- *                                      type: string
- *                                      format: date
- *                                      example: "2025/01/31"
- *                          service_detail:
- *                              type: object
- *                              properties:
- *                                  clinic_code:
- *                                      type: string
- *                                      example: POL07
- *                                  doctor_code:
- *                                      type: string
- *                                      example: DR00000015
- *                          billing_detail:
- *                              type: object
- *                              properties:
- *                                  treatment:
- *                                      type: string
- *                                      example: Periksa Dokter
- *                                  discount:
- *                                      type: integer
- *                                      example: 45
- *                          visit_detail:
- *                              type: object
- *                              properties:
- *                                  class_type:
- *                                      type: string
- *                                      example: NON
- *                                  insurance_type:
- *                                      type: string
- *                                      example: UMUM
- *                                  insurance_number:
+ *                                  ktp_number:
  *                                      type: string
  *                                      example: "1234567890"
- *                                  guarantor:
+ *                                  first_name:
  *                                      type: string
- *                                      example: PT. Backend
- *                                  entry_method:
+ *                                      example: "Test"
+ *                                  last_name:
  *                                      type: string
- *                                      example: Datang Sendiri
- *                                  tariff_code:
+ *                                      example: "Patient"
+ *                                  mother_name:
  *                                      type: string
- *                                      example: RHS
+ *                                      example: "BE"
+ *                          personalInfo:
+ *                              type: object
+ *                              properties:
+ *                                  birth_place:
+ *                                      type: string
+ *                                      example: "Purworejo"
+ *                                  birth_date:
+ *                                      type: string
+ *                                      format: date
+ *                                      example: "1990-01-01"
+ *                                  gender:
+ *                                      type: string
+ *                                      example: "Perempuan"
+ *                                  blood_type:
+ *                                      type: string
+ *                                      example: "A"
+ *                                  marital_status:
+ *                                      type: string
+ *                                      example: "Single"
+ *                                  religion:
+ *                                      type: string
+ *                                      example: "Islam"
+ *                                  contact_number:
+ *                                      type: string
+ *                                      example: "1234567890"
+ *                                  email:
+ *                                      type: string
+ *                                      example: "test@example.com"
+ *                                  id_type:
+ *                                      type: string
+ *                                      example: "KTP"
+ *                                  employeer:
+ *                                      type: string
+ *                                      example: "Company Inc."
+ *                                  education:
+ *                                      type: string
+ *                                      example: "D4/S1"
+ *                          socialData:
+ *                              type: object
+ *                              properties:
+ *                                  address:
+ *                                      type: string
+ *                                      example: "Test Street"
+ *                                  city:
+ *                                      type: string
+ *                                      example: "Malinau"
+ *                                  postal_code:
+ *                                      type: integer
+ *                                      example: 12345
+ *                                  weight:
+ *                                      type: integer
+ *                                      example: 41
+ *                                  ethnicity:
+ *                                      type: string
+ *                                      example: "JAWA"
+ *                          emergencyContact:
+ *                              type: object
+ *                              properties:
+ *                                  contact_name:
+ *                                      type: string
+ *                                      example: "BE"
+ *                                  phone_number:
+ *                                      type: string
+ *                                      example: "1234567890"
+ *                                  address:
+ *                                      type: string
+ *                                      example: "Test Street"
+ *                                  city:
+ *                                      type: string
+ *                                      example: "Malinau"
  *      responses:
  *          201:
  *              description: Outpatient registration successfully created
@@ -543,10 +573,7 @@ router.get('/:id', authMiddleware, patientController.getPatientById);
  *                          properties:
  *                              message:
  *                                  type: string
- *                                  example: Outpatient registration successfully created
- *                              queue_number:
- *                                  type: integer
- *                                  example: 1
+ *                                  example: "Patient successfully created"
  *          400:
  *              description: Invalid input data
  *              content:
@@ -556,7 +583,7 @@ router.get('/:id', authMiddleware, patientController.getPatientById);
  *                          properties:
  *                              message:
  *                                  type: string
- *                                  example: Invalid input data
+ *                                  example: "Invalid input data"
  *          401:
  *              description: Unauthorized
  *              content:
@@ -566,7 +593,7 @@ router.get('/:id', authMiddleware, patientController.getPatientById);
  *                          properties:
  *                              message:
  *                                  type: string
- *                                  example: Unauthorized
+ *                                  example: "Unauthorized"
  *          500:
  *              description: Internal server error
  *              content:
@@ -576,10 +603,10 @@ router.get('/:id', authMiddleware, patientController.getPatientById);
  *                          properties:
  *                              message:
  *                                  type: string
- *                                  example: Internal server error
+ *                                  example: "Internal server error"
  *                              error:
  *                                  type: string
- *                                  example: Error message
+ *                                  example: "Error message"
  */
 router.post('/', authMiddleware, patientController.createPatient);
 
@@ -607,80 +634,120 @@ router.post('/', authMiddleware, patientController.createPatient);
  *           schema:
  *             type: object
  *             properties:
- *               register:
+ *               patient:
  *                 type: object
  *                 properties:
- *                   patient_id:
- *                     type: integer
- *                     example: 1
- *                   session:
+ *                   ktp_number:
  *                     type: string
- *                     example: Fullday
- *                   notes:
+ *                     example: "3456784321"
+ *                   first_name:
  *                     type: string
- *                     example: Kontrol rutin
- *                   visit_date:
+ *                     example: "Test"
+ *                   last_name:
+ *                     type: string
+ *                     example: "Patient"
+ *                   mother_name:
+ *                     type: string
+ *                     example: "COBA"
+ *               personalInfo:
+ *                 type: object
+ *                 properties:
+ *                   birth_place:
+ *                     type: string
+ *                     example: "Purworejo"
+ *                   birth_date:
  *                     type: string
  *                     format: date
- *                     example: "2025/01/31"
- *               service_detail:
- *                 type: object
- *                 properties:
- *                   clinic_code:
+ *                     example: "1992-01-08"
+ *                   gender:
  *                     type: string
- *                     example: POL07
- *                   doctor_code:
+ *                     example: "Laki-laki"
+ *                   blood_type:
  *                     type: string
- *                     example: DR00000015
- *               billing_detail:
- *                 type: object
- *                 properties:
- *                   treatment:
+ *                     example: "A"
+ *                   maritial_status:
  *                     type: string
- *                     example: Periksa Dokter
- *                   discount:
- *                     type: integer
- *                     example: 45
- *               visit_detail:
- *                 type: object
- *                 properties:
- *                   class_type:
+ *                     example: "Single"
+ *                   religion:
  *                     type: string
- *                     example: NON
- *                   insurance_type:
- *                     type: string
- *                     example: UMUM
- *                   insurance_number:
+ *                     example: "Islam"
+ *                   contact_number:
  *                     type: string
  *                     example: "1234567890"
- *                   guarantor:
+ *                   email:
  *                     type: string
- *                     example: PT. Backend
- *                   entry_method:
+ *                     example: "test@example.com"
+ *                   id_type:
  *                     type: string
- *                     example: Datang Sendiri
- *                   tariff_code:
+ *                     example: "KTP"
+ *                   employeer:
  *                     type: string
- *                     example: RHS
+ *                     example: "Company Inc."
+ *                   education:
+ *                     type: string
+ *                     example: "D4/S1"
+ *               socialData:
+ *                 type: object
+ *                 properties:
+ *                   address:
+ *                     type: string
+ *                     example: "Test Street"
+ *                   city:
+ *                     type: string
+ *                     example: "Malinau"
+ *                   postal_code:
+ *                     type: integer
+ *                     example: 12345
+ *                   weight:
+ *                     type: integer
+ *                     example: 41
+ *                   ethnicity:
+ *                     type: string
+ *                     example: "JAWA"
+ *               emergencyContact:
+ *                 type: object
+ *                 properties:
+ *                   contact_name:
+ *                     type: string
+ *                     example: "BE"
+ *                   phone_number:
+ *                     type: string
+ *                     example: "1234567890"
+ *                   address:
+ *                     type: string
+ *                     example: "Test Street"
+ *                   city:
+ *                     type: string
+ *                     example: "Malinau"
  *             example:
- *               register:
- *                 patient_id: 1
- *                 session: Fullday
- *                 notes: Kontrol rutin
- *                 visit_date: "2025/01/31"
- *               service_detail:
- *                 clinic_code: POL07
- *                 doctor_code: DR00000015
- *               billing_detail:
- *                 treatment: Periksa Dokter
- *                 discount: 45
- *               visit_detail:
- *                 class_type: NON
- *                 insurance_type: UMUM
- *                 insurance_number: "1234567890"
- *                 guarantor: PT. Backend
- *                 entry_method: Datang Sendiri
- *                 tariff_code: RHS
+ *               patient:
+ *                 ktp_number: "3456784321"
+ *                 first_name: "Test"
+ *                 last_name: "Patient"
+ *                 mother_name: "COBA"
+ *               personalInfo:
+ *                 birth_place: "Purworejo"
+ *                 birth_date: "1992-01-08"
+ *                 gender: "Laki-laki"
+ *                 blood_type: "A"
+ *                 maritial_status: "Single"
+ *                 religion: "Islam"
+ *                 contact_number: "1234567890"
+ *                 email: "test@example.com"
+ *                 id_type: "KTP"
+ *                 employeer: "Company Inc."
+ *                 education: "D4/S1"
+ *               socialData:
+ *                 address: "Test Street"
+ *                 city: "Malinau"
+ *                 postal_code: 12345
+ *                 weight: 41
+ *                 ethnicity: "JAWA"
+ *               emergencyContact:
+ *                 contact_name: "BE"
+ *                 phone_number: "1234567890"
+ *                 address: "Test Street"
+ *                 city: "Malinau"
  *     responses:
  *       200:
  *         description: Patient updated successfully

@@ -20,9 +20,9 @@ const login = async (req, res) => {
 
     logger.info(`Logged in employee ${email}`);
     res.status(200).json({ token });
-  } catch (err) {
-    logger.error(`Error during login: ${err.message}`);
-    res.status(500).json({ message: 'Internal server error', error: err.message });
+  } catch (error) {
+    logger.error(`Error during login: ${error.message}`);
+    res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 };
 
