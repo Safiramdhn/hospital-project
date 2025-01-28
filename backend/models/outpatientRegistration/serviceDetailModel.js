@@ -1,6 +1,8 @@
 const { Model, DataTypes } = require('sequelize');
 const db = require('../../config/database');
-
+const OutPatientRegistration = require('./outpatientRegistrationModel');
+const Clinic = require('./clinicModel');
+const Doctor = require('../users/doctorModel');
 
 class ServiceDetail extends Model {}
 
@@ -28,5 +30,15 @@ ServiceDetail.init(
     },
   }
 );
+
+// Define associations
+ServiceDetail.belongsTo(OutPatientRegistration, { foreignKey: 'registration_id', as: 'outpatient_registration' });
+OutPatientRegistration.hasOne(ServiceDetail, { foreignKey: 'registration_id', as: 'service_detail' });
+
+ServiceDetail.belongsTo(Clinic, { foreignKey: 'clinic_code', targetKey: 'code', as: 'clinic' });
+Clinic.hasMany(ServiceDetail, { foreignKey: 'clinic_code', sourceKey: 'code', as: 'service_details' });
+
+ServiceDetail.belongsTo(Doctor, { foreignKey: 'doctor_code', targetKey: 'code', as: 'doctor' });
+Doctor.hasMany(ServiceDetail, { foreignKey: 'doctor_code', sourceKey: 'code', as: 'service_details' });
 
 module.exports = ServiceDetail;

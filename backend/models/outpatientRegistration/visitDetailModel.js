@@ -1,5 +1,8 @@
 const { Model, DataTypes } = require('sequelize');
 const db = require('../../config/database');
+const OutPatientRegistration = require('./outpatientRegistrationModel');
+const TariffReference = require('./tariffReferenceModel');
+
 
 class VisitDetail extends Model {}
 
@@ -33,5 +36,12 @@ VisitDetail.init(
     },
   }
 );
+
+// Define associations
+VisitDetail.belongsTo(OutPatientRegistration, { foreignKey: 'registration_id', as: 'outpatient_registration' });
+OutPatientRegistration.hasOne(VisitDetail, { foreignKey: 'registration_id', as: 'visit_detail' });
+
+VisitDetail.belongsTo(TariffReference, { foreignKey: 'tariff_code', targetKey: 'tariff_code', as: 'tariff_reference' });
+TariffReference.hasMany(VisitDetail, { foreignKey: 'tariff_code', sourceKey: 'tariff_code', as: 'visit_details' });
 
 module.exports = VisitDetail;

@@ -12,7 +12,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /auth/login:
+ * /api/auth/login:
  *  post:
  *      summary: Employee login
  *      description: Authenticates an employee using their email and password

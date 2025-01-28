@@ -19,6 +19,7 @@ module.exports = {
       visit_date: { type: Sequelize.DATE, allowNull: false },
       last_visit: { type: Sequelize.DATE, allowNull: false },
       notes: { type: Sequelize.STRING, allowNull: true },
+      queue_number: { type: Sequelize.INTEGER },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -31,5 +32,6 @@ module.exports = {
       },
       deleted_at: { type: Sequelize.DATE, allowNull: true },
     });
-  }
+  },
+  async down(queryInterface, Sequelize){}
 };

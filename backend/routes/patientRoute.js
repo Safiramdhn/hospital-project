@@ -13,7 +13,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /patient/:
+ * /api/patient/:
  *  get:
  *      summary: Get all patients
  *      description: Retrieves a list of all patients
@@ -70,7 +70,7 @@ router.get('/',authMiddleware, patientController.getAllPatients);
 
 /**
  * @swagger
- * /patient/find-patient-record:
+ * /api/patient/find-patient-record:
  *  get:
  *      summary: Find patient record by credentials
  *      description: Retrieves a patient record based on provided credentials
@@ -158,7 +158,7 @@ router.get('/find-patient-record', authMiddleware, patientController.findPatient
 
 /**
  * @swagger
- * /patient/{id}:
+ * /api/patient/{id}:
  *  get:
  *      summary: Get patient by ID
  *      description: Retrieves a patient record by ID
@@ -230,7 +230,7 @@ router.get('/:id', authMiddleware, patientController.getPatientById);
 
 /**
  * @swagger
- * /patient/:
+ * /api/patient/:
  *  post:
  *      summary: Create a new patient
  *      description: Creates a new patient record
@@ -305,7 +305,7 @@ router.post('/', authMiddleware, patientController.createPatient);
 
 /**
  * @swagger
- * /patient/:
+ * /api/patient/:
  *   put:
  *     summary: Update a patient
  *     description: Update the details of an existing patient.
@@ -343,7 +343,7 @@ router.put('/', authMiddleware, patientController.updatePatient);
 
 /**
  * @swagger
- * /patient/{id}:
+ * /api/patient/{id}:
  *   delete:
  *     summary: Delete a patient
  *     description: Delete a patient by ID.

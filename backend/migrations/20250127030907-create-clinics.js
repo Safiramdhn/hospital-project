@@ -27,5 +27,6 @@ module.exports = {
     });
 
     await queryInterface.addIndex('clinics', ['code'], { unique: true });
-  }
+  },
+  async down(queryInterface, Sequelize){}
 };

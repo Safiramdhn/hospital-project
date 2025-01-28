@@ -2,6 +2,7 @@ const { Model, DataTypes } = require('sequelize');
 const db = require('../../config/database');
 const TariffReference = require('./tariffReferenceModel');
 const VisitDetail = require('./visitDetailModel');
+const OutPatientRegistration = require('./outpatientRegistrationModel');
 
 class BillingDetail extends Model {}
 
@@ -105,5 +106,8 @@ BillingDetail.init(
     
   }
 );
+
+BillingDetail.belongsTo(OutPatientRegistration, {foreignKey: 'registration_id', as: 'outpatient_registration' });
+OutPatientRegistration.hasOne(BillingDetail, {foreignKey: 'registration_id', as: 'billing_detail'});
 
 module.exports = BillingDetail;

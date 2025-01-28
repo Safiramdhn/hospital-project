@@ -28,5 +28,6 @@ module.exports = {
     });
 
     await queryInterface.addIndex('doctors', ['code'], { unique: true });
-  }
+  },
+  async down(queryInterface, Sequelize){}
 };

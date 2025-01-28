@@ -50,5 +50,6 @@ module.exports = {
     });
 
     await queryInterface.addIndex('tariff_references', ['tariff_code'], { unique: true });
-  }
+  },
+  async down(queryInterface, Sequelize){}
 };
