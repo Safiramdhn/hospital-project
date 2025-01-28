@@ -12,6 +12,7 @@ const outpatientRegistrationRoutes = require('./routes/outpatientRegisterRoute')
 const clinicRoutes = require('./routes/clinicRoute');
 const doctorRoutes = require('./routes/doctorRoute');
 const tariffReferenceRoutes = require('./routes/tariffReferenceRoute');
+const employeeRoutes = require('./routes/employeeRoute');
 
 const PORT = process.env.PORT || 3000;
 
@@ -28,6 +29,7 @@ app.use('/api/outpatient-register', outpatientRegistrationRoutes);
 app.use('/api/clinic', clinicRoutes);
 app.use('/api/doctor', doctorRoutes);
 app.use('/api/tariff-reference', tariffReferenceRoutes);
+app.use('/api/employee', employeeRoutes);
 
 // Test DB connection
 sequelize
