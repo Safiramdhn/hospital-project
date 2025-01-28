@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const logger = require('../utils/logger');
-const authService = require('../services/authServices');
+const authService = require('../services/authService');
 
 const JWT_SECRET = 'jwt_secret';
 

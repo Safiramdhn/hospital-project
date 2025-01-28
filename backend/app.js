@@ -13,6 +13,8 @@ const clinicRoutes = require('./routes/clinicRoute');
 const doctorRoutes = require('./routes/doctorRoute');
 const tariffReferenceRoutes = require('./routes/tariffReferenceRoute');
 
+const PORT = process.env.PORT || 3000;
+
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
@@ -33,5 +35,4 @@ sequelize
   .then(() => console.log('Database connected'))
   .catch((err) => console.error('Unable to connect to database:', err));
 
-const PORT = 3000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
