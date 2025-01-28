@@ -1,7 +1,6 @@
-const User = require('../models/users/index');
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const logger = require('../utils/logger');
+const authService = require('../services/authServices');
 
 const JWT_SECRET = 'jwt_secret';
 
@@ -10,24 +9,7 @@ const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const employee = await User.Employee.findOne({ where: { email } });
-
-    if (!employee) {
-      logger.error(`Couldn't find employee ${email}`);
-      return res.status(401).json({ message: 'Invalid email or password' });
-    }
-
-    if (!employee.password) {
-      logger.error(`Employee ${email} has no password`);
-      return res.status(401).json({ message: 'Invalid password, please try again' });
-    }
-
-    // Compare entered password with hashed password from the database
-    const isPasswordValid = await bcrypt.compare(password, employee.password);
-    if (!isPasswordValid) {
-      logger.error(`Employee ${email} entered incorrect password`);
-      return res.status(401).json({ message: 'Invalid password, please try again' });
-    }
+    const employee = await authService.loginService(email, password);
 
     // Generate JWT token
     const token = jwt.sign(
