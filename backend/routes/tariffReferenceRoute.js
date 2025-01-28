@@ -32,15 +32,37 @@ const router = express.Router();
  *                              properties:
  *                                  id:
  *                                      type: integer
+ *                                      description: The unique identifier for the tariff reference
  *                                  tariff_code:
  *                                      type: string
+ *                                      description: The code associated with the tariff
  *                                  category:
  *                                      type: string
+ *                                      description: The category of the tariff
  *                                  description:
  *                                      type: string
- *                                  amount:
- *                                      type: number
- *                                      format: float
+ *                                      description: A brief description of the tariff
+ *                                  base_registration_fee:
+ *                                      type: string
+ *                                      description: The base registration fee for the tariff
+ *                                  base_examination_fee:
+ *                                      type: string
+ *                                      description: The base examination fee for the tariff
+ *                                  is_active:
+ *                                      type: boolean
+ *                                      description: Whether the tariff reference is active
+ *                                  createdAt:
+ *                                      type: string
+ *                                      format: date-time
+ *                                      description: The creation timestamp of the tariff reference
+ *                                  updatedAt:
+ *                                      type: string
+ *                                      format: date-time
+ *                                      description: The last update timestamp of the tariff reference
+ *                                  deletedAt:
+ *                                      type: string
+ *                                      format: date-time
+ *                                      description: The deletion timestamp of the tariff reference (if applicable)
  *          401:
  *              description: Unauthorized
  *              content:
@@ -66,5 +88,6 @@ const router = express.Router();
  *                                  example: Error message
  */
 router.get('/', authMiddleware, controller.getAllTariffReferences);
+
 
 module.exports = router;

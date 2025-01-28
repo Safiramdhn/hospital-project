@@ -5,7 +5,7 @@ const getEmployee = async (id) => {
         throw new Error('Invalid employee ID');
     }
     try {
-        const employee = await employeeRepo.findById(id);
+        const employee = await employeeRepo.findByID(id);
         return employee;
     } catch (error) {
         throw new Error('Error retrieving employee data:'+ error.message);

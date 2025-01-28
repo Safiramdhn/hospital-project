@@ -26,7 +26,7 @@ const router = express.Router();
  *                      properties:
  *                          email: 
  *                              type: string
- *                              example: john@example.com
+ *                              example: john.doe@example.com
  *                          password: 
  *                              type: string
  *                              example: password123

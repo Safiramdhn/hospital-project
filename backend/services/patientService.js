@@ -7,7 +7,7 @@ const getAllPatientService = async () => {
 };
 
 const getPatientByIdService = async (patientId) => {
-  return await patientRepo.findById(patientId);
+  return await patientRepo.getById(patientId);
 };
 
 const getPatientByCredentialService = async (patient_credential) => {
@@ -32,7 +32,7 @@ const updatePatientService = async (patientId, patient, personalInfo, socialData
 };
 
 const deletePatientService = async (patientId) => {
-  return await patientRepo.delete(patientId);
+  return await patientRepo.deleteById(patientId);
 };
 
 module.exports = {

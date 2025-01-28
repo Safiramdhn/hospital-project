@@ -32,10 +32,26 @@ const router = express.Router();
  *                              properties:
  *                                  id:
  *                                      type: integer
- *                                  code:
- *                                      type: string
+ *                                      example: 1
  *                                  name:
  *                                      type: string
+ *                                      example: Poliklinik Anak
+ *                                  code:
+ *                                      type: string
+ *                                      example: POL01
+ *                                  createdAt:
+ *                                      type: string
+ *                                      format: date-time
+ *                                      example: "2025-01-28T04:06:33.000Z"
+ *                                  updatedAt:
+ *                                      type: string
+ *                                      format: date-time
+ *                                      example: "2025-01-28T04:06:33.000Z"
+ *                                  deletedAt:
+ *                                      type: string
+ *                                      format: date-time
+ *                                      nullable: true
+ *                                      example: null
  *          401:
  *              description: Unauthorized
  *              content:
