@@ -365,5 +365,116 @@ router.post('/', authMiddleware, controllers.createOutPatientRegistration);
  */
 router.get('/search', authMiddleware, controllers.getOutPatientRegistration);
 
+/**
+ * @swagger
+ * /api/outpatient-register:
+ *   get:
+ *     summary: Retrieve all outpatient registrations
+ *     description: Fetches a list of outpatient registrations with optional query filters.
+ *     tags:
+ *       - Outpatient Registration
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: patient_name
+ *         schema:
+ *           type: string
+ *         description: Filter by patient's first name
+ *       - in: query
+ *         name: doctor_name
+ *         schema:
+ *           type: string
+ *         description: Filter by doctor's name
+ *       - in: query
+ *         name: clinic_name
+ *         schema:
+ *           type: string
+ *         description: Filter by clinic name
+ *       - in: query
+ *         name: registration_number
+ *         schema:
+ *           type: integer
+ *         description: Filter by registration number
+ *       - in: query
+ *         name: booking_number
+ *         schema:
+ *           type: integer
+ *         description: Filter by booking number
+ *     responses:
+ *       200:
+ *         description: A list of outpatient registrations
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   patient_id:
+ *                     type: integer
+ *                   registration_number:
+ *                     type: string
+ *                   booking_number:
+ *                     type: string
+ *                   session:
+ *                     type: string
+ *                   visit_date:
+ *                     type: string
+ *                     format: date-time
+ *                   last_visit:
+ *                     type: string
+ *                     format: date-time
+ *                   notes:
+ *                     type: string
+ *                   queue_number:
+ *                     type: integer
+ *                   service_detail:
+ *                     type: object
+ *                     properties:
+ *                       clinic:
+ *                         type: object
+ *                         properties:
+ *                           name:
+ *                             type: string
+ *                       doctor:
+ *                         type: object
+ *                         properties:
+ *                           name:
+ *                             type: string
+ *                   visit_detail:
+ *                     type: object
+ *                     properties:
+ *                       instalation_type:
+ *                         type: string
+ *                       insurance_type:
+ *                         type: string
+ *                   billing_detail:
+ *                     type: object
+ *                     properties:
+ *                       treatment:
+ *                         type: string
+ *                       total_payment:
+ *                         type: number
+ *                   patient:
+ *                     type: object
+ *                     properties:
+ *                       first_name:
+ *                         type: string
+ *                       last_name:
+ *                         type: string
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
+router.get('/', authMiddleware, controllers.getAllOutPatientRegistration);
 
 module.exports = router;
