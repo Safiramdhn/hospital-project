@@ -47,7 +47,7 @@ const LoginPage = () => {
           <h2 className="text-3xl font-semibold text-center text-charcoal-500 mb-6">Login Pegawai</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="email" className="block text-sm font-medium text-charcoal-700">
                 Email
               </label>
               <input
@@ -61,7 +61,7 @@ const LoginPage = () => {
               />
             </div>
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="password" className="block text-sm font-medium text-charcoal-700">
                 Password
               </label>
               <input

@@ -248,11 +248,11 @@ const OutpatientRegistrationForm: React.FC = () => {
           type="text"
           value={patientCredential}
           onChange={(e) => setPatientCredential(e.target.value)}
-          className="w-full p-2 border rounded"
+          className="border p-2 w-full rounded-md shadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none"
           placeholder="No. KTP / No. Rekam Medis"
         />
       </div>
-      <button type="button" onClick={handlePatientSearch} className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition my-4">
+      <button type="button" onClick={handlePatientSearch} className="w-full bg-moonstone-100 text-davysGray-800 py-2 rounded hover:bg-mint-300 transition my-4">
         Cari Pasien
       </button>
 
@@ -269,7 +269,7 @@ const OutpatientRegistrationForm: React.FC = () => {
               name="register.patient_id"
               value={patientData?.id}
               onChange={handleChange}
-              className="w-16 p-2 border rounded"
+              className="border p-2 w-full rounded-md shadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none"
               required
             />
           </div>
@@ -279,7 +279,7 @@ const OutpatientRegistrationForm: React.FC = () => {
             <input
               type="text"
               value={`${patientData?.first_name || ''} ${patientData?.last_name || ''}`}
-              className="p-2 border rounded custom-width-input"
+              className="border p-2 w-full rounded-md shadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none"
               readOnly
             />
           </div>
@@ -294,7 +294,7 @@ const OutpatientRegistrationForm: React.FC = () => {
         </div>
         <div>
           <label className="block text-sm font-medium">Catatan</label>
-          <textarea name="register.notes" value={formData.register.notes} onChange={handleChange} className="w-full p-2 border rounded" />
+          <textarea name="register.notes" value={formData.register.notes} onChange={handleChange} className="w-full p-2 border roundedshadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none" />
         </div>
         <div>
           <label className="block text-sm font-medium">Tanggal Rawat Jalan</label>
@@ -303,7 +303,7 @@ const OutpatientRegistrationForm: React.FC = () => {
             name="register.visit_date"
             value={formData.register.visit_date}
             onChange={handleDateChange}
-            className="w-full p-2 border rounded"
+            className="border p-2 w-full rounded-md shadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none"
             required
           />
         </div>
@@ -316,7 +316,7 @@ const OutpatientRegistrationForm: React.FC = () => {
             name="service_detail.clinic_code"
             value={formData.service_detail.clinic_code}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded shadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none"
             required
           >
             <option value="">Pilih Poliklinik</option>
@@ -333,7 +333,7 @@ const OutpatientRegistrationForm: React.FC = () => {
             name="service_detail.doctor_code"
             value={formData.service_detail.doctor_code}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded shadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none"
             required
           >
             <option value="">Pilih Dokter</option>
@@ -357,7 +357,7 @@ const OutpatientRegistrationForm: React.FC = () => {
             name="billing_detail.treatment"
             value={formData.billing_detail.treatment}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="border p-2 w-full rounded-md shadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none"
             required
           />
         </div>
@@ -368,7 +368,7 @@ const OutpatientRegistrationForm: React.FC = () => {
             name="billing_detail.discount"
             value={formData.billing_detail.discount || 0}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="border p-2 w-full rounded-md shadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none"
           />
         </div>
 
@@ -380,7 +380,7 @@ const OutpatientRegistrationForm: React.FC = () => {
             name="visit_detail.class_type"
             value={formData.visit_detail.class_type}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded shadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none"
           >
             <option value="NON">Non</option>
             <option value="VIP  ">VIP</option>
@@ -393,7 +393,7 @@ const OutpatientRegistrationForm: React.FC = () => {
             name="visit_detail.insurance_type"
             value={formData.visit_detail.insurance_type}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded shadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none"
           >
             <option value="UMUM">UMUM</option>
             <option value="BPJS Kesehatan">BPJS Kesehatan</option>
@@ -407,7 +407,7 @@ const OutpatientRegistrationForm: React.FC = () => {
             name="visit_detail.insurance_number"
             value={formData.visit_detail.insurance_number}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="border p-2 w-full rounded-md shadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none"
           />
         </div>
         <div>
@@ -417,7 +417,7 @@ const OutpatientRegistrationForm: React.FC = () => {
             name="visit_detail.guarantor"
             value={formData.visit_detail.guarantor}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="border p-2 w-full rounded-md shadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none"
           />
         </div>
         <div>
@@ -426,7 +426,7 @@ const OutpatientRegistrationForm: React.FC = () => {
             name="visit_detail.entry_method"
             value={formData.visit_detail.entry_method}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded shadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none"
           >
             <option value="Datang Sendiri">Datang Sendiri</option>
             <option value="Rujukan">Rujukan</option>
@@ -438,7 +438,7 @@ const OutpatientRegistrationForm: React.FC = () => {
             name="visit_detail.tariff_code"
             value={formData.visit_detail.tariff_code}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded shadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none"
           >
             <option value="">Select Tariff</option>
             {tariffs.map((tariff) => (
@@ -449,7 +449,7 @@ const OutpatientRegistrationForm: React.FC = () => {
           </select>
         </div>
 
-        <div className="p-2 border rounded bg-gray-100"></div>
+        <div className="p-2 border-t-4 rounded border-gray-100"></div>
 
         {/* displaying temporary calculation of billing */}
         <h2>Data Pembayaran Sementara</h2>
@@ -517,7 +517,7 @@ const OutpatientRegistrationForm: React.FC = () => {
 
         <div className="p-2 border-t-4 rounded border-gray-100"></div>
         {/* Submit Button */}
-        <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition" disabled={loading}>
+        <button type="submit" className="w-full bg-moonstone-100 text-davysGray-800 py-2 rounded hover:bg-mint-300 transition my-4" disabled={loading}>
           {loading ? 'Submitting...' : 'Registrasi'}
         </button>
       </form>

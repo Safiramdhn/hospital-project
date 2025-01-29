@@ -40,8 +40,6 @@ const OutpatientList: React.FC = () => {
     doctorName: '',
     clinicName: '',
   });
-
-  const [filteredData, setFilteredData] = useState<OutPatients[]>([]);
   
   useEffect(() => {
       const fetchData = async () => {
@@ -110,45 +108,45 @@ const OutpatientList: React.FC = () => {
           placeholder="Nama Pasien"
           value={search.patientName}
           onChange={(e) => setSearch((prev) => ({ ...prev, patientName: e.target.value }))}
-          className="border p-2 mb-4 w-full rounded-md shadow-sm mr-2"
+          className="border p-2 mb-4 w-full rounded-md shadow-sm mr-2  focus:ring-2 focus:ring-mint-400 focus:outline-none"
         />
         <input
           type="text"
           placeholder="Nama Docter"
           value={search.doctorName}
           onChange={(e) => setSearch((prev) => ({ ...prev, doctorName: e.target.value }))}
-          className="border p-2 mb-4 w-full rounded-md shadow-sm mr-2"
+          className="border p-2 mb-4 w-full rounded-md shadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none"
         />
         <input
           type="text"
           placeholder="Nama Poliklinik"
           value={search.clinicName}
           onChange={(e) => setSearch((prev) => ({ ...prev, clinicName: e.target.value }))}
-          className="border p-2 mb-4 w-full rounded-md shadow-sm mr-2"
+          className="border p-2 mb-4 w-full rounded-md shadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none"
         />
         <input
           type="text"
           placeholder="No. Registrasi"
           value={search.registrationNumber}
           onChange={(e) => setSearch((prev) => ({ ...prev, registrationNumber: e.target.value }))}
-          className="border p-2 mb-4 w-full rounded-md shadow-s mr-2"
+          className="border p-2 mb-4 w-full rounded-md shadow-s mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none"
         />
         <input
           type="text"
           placeholder="No. Booking"
           value={search.bookingNumber}
           onChange={(e) => setSearch((prev) => ({ ...prev, bookingNumber: e.target.value }))}
-          className="border p-2 mb-4 w-full rounded-md shadow-sm mr-2"
+          className="border p-2 mb-4 w-full rounded-md shadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none"
         />
       </div>
 
       {loading ? (
-        <p className="text-center text-gray-500">Loading...</p>
+        <p className="text-center text-davysGray-500">Loading...</p>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full border-collapse border border-gray-300">
             <thead>
-              <tr className="bg-gray-100">
+              <tr className="bg-mint-100">
                 <th className="border p-2">No. Registrasi</th>
                 <th className="border p-2">No. Booking</th>
                 <th className="border p-2">Pasien</th>
