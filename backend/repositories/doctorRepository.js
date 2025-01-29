@@ -5,7 +5,6 @@ const getAll = async () => {
         const doctors = await Doctor.findAll();
         return doctors;
     } catch (error) {
-        console.error(error);
         throw error;
     }
 }

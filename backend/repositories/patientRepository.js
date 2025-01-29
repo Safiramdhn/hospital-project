@@ -1,5 +1,6 @@
 const { Patient, PatientPersonalInfo, PatientSocialData, PatientEmergencyContact } = require('../models/patients');
 const Sequelize = require('sequelize');
+const Employee = require('../models/users/employeeModel');
 
 const getAll = async () => {
   try {
@@ -13,12 +14,17 @@ const getAll = async () => {
 const getById = async (id) => {
   try {
     const patient = await Patient.findByPk(id, {
-        include: [
-          { model: PatientPersonalInfo, as: 'personal_information' },
-          { model: PatientSocialData, as: 'social_data' },
-          { model: PatientEmergencyContact, as: 'emergency_contact'},
-        ],
-      });
+      include: [
+        { model: PatientPersonalInfo, as: 'personal_information' },
+        { model: PatientSocialData, as: 'social_data' },
+        { model: PatientEmergencyContact, as: 'emergency_contact' },
+        {
+          model: Employee,
+          as: 'employee',
+          attributes: { exclude: ['password'] },
+        },
+      ],
+    });
     return patient;
   } catch (error) {
     throw error(`Error finding patient with id ${id}, ${error.message}`);
@@ -59,10 +65,8 @@ const create = async (patient, personalInfo, socialData, emergencyContact) => {
     await transaction.commit();
     return createdPatient;
   } catch (error) {
-    if (!transaction.finished) {
-      await transaction.rollback();
-    }
-    throw error(`Error creating new patient, ${error.message}`);
+    await transaction.rollback();
+    throw new Error(`Error creating new patient, ${error.message}`);
   }
 };
 
@@ -71,6 +75,11 @@ const findByCredential = async (patient_credential) => {
     where: {
       [Sequelize.Op.or]: [{ ktp_number: patient_credential }, { mr_number: patient_credential }],
     },
+    include: [
+      { model: PatientPersonalInfo, as: 'personal_information' },
+      { model: PatientSocialData, as: 'social_data' },
+      { model: PatientEmergencyContact, as: 'emergency_contact' },
+    ],
   });
 };
 
@@ -107,8 +116,7 @@ const deleteById = async (id) => {
     }
 
     // Soft delete patient
-    patientToDelete.deletedAt = new Date();
-    await patientToDelete.save({ transaction });
+    await Patient.destroy({ where: { id }, transaction });
 
     // Soft delete related personalInfo
     const personalInfo = await PatientPersonalInfo.findOne({ where: { patient_id: id }, transaction });

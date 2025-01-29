@@ -47,8 +47,8 @@ const findByQueueNumber = async (queueNumber) => {
   });
 };
 
-module.exports = { 
-    create,
-    findByID,
-    findByQueueNumber,
- };
+module.exports = {
+  create,
+  findByID,
+  findByQueueNumber,
+};

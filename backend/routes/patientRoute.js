@@ -33,15 +33,40 @@ const router = express.Router();
  *                                  id:
  *                                      type: integer
  *                                      example: 1
- *                                  name:
+ *                                  mr_number:
  *                                      type: string
- *                                      example: John Doe
- *                                  email:
+ *                                      example: "20250128-1-c775e7b7"
+ *                                  ktp_number:
  *                                      type: string
- *                                      example: john@example.com
- *                                  phone:
+ *                                      example: "1234567890"
+ *                                  first_name:
  *                                      type: string
- *                                      example: 1234567890
+ *                                      example: "Test"
+ *                                  last_name:
+ *                                      type: string
+ *                                      example: "Patient"
+ *                                  active_status:
+ *                                      type: boolean
+ *                                      example: true
+ *                                  mother_name:
+ *                                      type: string
+ *                                      example: "BE"
+ *                                  employee_id:
+ *                                      type: integer
+ *                                      example: 1
+ *                                  createdAt:
+ *                                      type: string
+ *                                      format: date-time
+ *                                      example: "2025-01-28T04:43:08.000Z"
+ *                                  updatedAt:
+ *                                      type: string
+ *                                      format: date-time
+ *                                      example: "2025-01-28T04:43:08.000Z"
+ *                                  deletedAt:
+ *                                      type: string
+ *                                      format: date-time
+ *                                      nullable: true
+ *                                      example: null
  *          401:
  *              description: Unauthorized
  *              content:
@@ -71,25 +96,23 @@ router.get('/',authMiddleware, patientController.getAllPatients);
 /**
  * @swagger
  * /api/patient/find-patient-record:
- *  get:
+ *  post:
  *      summary: Find patient record by credentials
  *      description: Retrieves a patient record based on provided credentials
  *      tags: [Patient]
  *      security:
  *          - bearerAuth: []
- *      parameters:
- *          - in: query
- *            name: email
- *            schema:
- *              type: string
- *            required: true
- *            description: The patient's email
- *          - in: query
- *            name: phone
- *            schema:
- *              type: string
- *            required: true
- *            description: The patient's phone number
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          patient_credential:
+ *                              type: string
+ *                              description: The patient's credential (e.g., ktp number or mr number)
+ *                              example: "1234567890"
  *      responses:
  *          200:
  *              description: Patient record found
@@ -98,18 +121,97 @@ router.get('/',authMiddleware, patientController.getAllPatients);
  *                      schema:
  *                          type: object
  *                          properties:
- *                              id:
- *                                  type: integer
- *                                  example: 1
- *                              name:
- *                                  type: string
- *                                  example: John Doe
- *                              email:
- *                                  type: string
- *                                  example: john@example.com
- *                              phone:
- *                                  type: string
- *                                  example: 1234567890
+ *                              patient:
+ *                                  type: object
+ *                                  properties:
+ *                                      id:
+ *                                          type: integer
+ *                                          example: 1
+ *                                      mr_number:
+ *                                          type: string
+ *                                          example: "20250128-1-c775e7b7"
+ *                                      ktp_number:
+ *                                          type: string
+ *                                          example: "1234567890"
+ *                                      first_name:
+ *                                          type: string
+ *                                          example: "Test"
+ *                                      last_name:
+ *                                          type: string
+ *                                          example: "Patient"
+ *                                      active_status:
+ *                                          type: boolean
+ *                                          example: true
+ *                                      mother_name:
+ *                                          type: string
+ *                                          example: "BE"
+ *                                      employee_id:
+ *                                          type: integer
+ *                                          example: 1
+ *                                      createdAt:
+ *                                          type: string
+ *                                          format: date-time
+ *                                          example: "2025-01-28T04:43:08.000Z"
+ *                                      updatedAt:
+ *                                          type: string
+ *                                          format: date-time
+ *                                          example: "2025-01-28T04:43:08.000Z"
+ *                                      deletedAt:
+ *                                          type: string
+ *                                          format: date-time
+ *                                          nullable: true
+ *                                          example: null
+ *                                      personal_information:
+ *                                          type: object
+ *                                          properties:
+ *                                              birth_place:
+ *                                                  type: string
+ *                                                  example: "Purworejo"
+ *                                              birth_date:
+ *                                                  type: string
+ *                                                  example: "1990-01-01"
+ *                                              gender:
+ *                                                  type: string
+ *                                                  example: "Perempuan"
+ *                                              blood_type:
+ *                                                  type: string
+ *                                                  example: "A"
+ *                                              contact_number:
+ *                                                  type: string
+ *                                                  example: "1234567890"
+ *                                              email:
+ *                                                  type: string
+ *                                                  example: "test@example.com"
+ *                                      social_data:
+ *                                          type: object
+ *                                          properties:
+ *                                              address:
+ *                                                  type: string
+ *                                                  example: "Test Street"
+ *                                              city:
+ *                                                  type: string
+ *                                                  example: "Malinau"
+ *                                              postal_code:
+ *                                                  type: string
+ *                                                  example: "12345"
+ *                                              weight:
+ *                                                  type: integer
+ *                                                  example: 41
+ *                                              ethnicity:
+ *                                                  type: string
+ *                                                  example: "JAWA"
+ *                                      emergency_contact:
+ *                                          type: object
+ *                                          properties:
+ *                                              contact_name:
+ *                                                  type: string
+ *                                                  example: "BE"
+ *                                              phone_number:
+ *                                                  type: string
+ *                                                  example: "1234567890"
+ *                                              address:
+ *                                                  type: string
+ *                                                  example: "Test Street"
  *          400:
  *              description: Invalid input data
  *              content:
@@ -119,7 +221,7 @@ router.get('/',authMiddleware, patientController.getAllPatients);
  *                          properties:
  *                              message:
  *                                  type: string
- *                                  example: Invalid input data
+ *                                  example: "Invalid input data"
  *          401:
  *              description: Unauthorized
  *              content:
@@ -129,7 +231,7 @@ router.get('/',authMiddleware, patientController.getAllPatients);
  *                          properties:
  *                              message:
  *                                  type: string
- *                                  example: Unauthorized
+ *                                  example: "Unauthorized"
  *          404:
  *              description: Patient not found
  *              content:
@@ -139,7 +241,7 @@ router.get('/',authMiddleware, patientController.getAllPatients);
  *                          properties:
  *                              message:
  *                                  type: string
- *                                  example: Patient not found
+ *                                  example: "Patient not found"
  *          500:
  *              description: Internal server error
  *              content:
@@ -149,12 +251,12 @@ router.get('/',authMiddleware, patientController.getAllPatients);
  *                          properties:
  *                              message:
  *                                  type: string
- *                                  example: Internal server error
+ *                                  example: "Internal server error"
  *                              error:
  *                                  type: string
- *                                  example: Error message
+ *                                  example: "Error message"
  */
-router.get('/find-patient-record', authMiddleware, patientController.findPatientByCredentials);
+router.post('/find-patient-record', authMiddleware, patientController.findPatientByCredentials);
 
 /**
  * @swagger
@@ -183,15 +285,147 @@ router.get('/find-patient-record', authMiddleware, patientController.findPatient
  *                              id:
  *                                  type: integer
  *                                  example: 1
- *                              name:
+ *                              mr_number:
  *                                  type: string
- *                                  example: John Doe
- *                              email:
- *                                  type: string
- *                                  example: john@example.com
- *                              phone:
+ *                                  example: 20250128-1-c775e7b7
+ *                              ktp_number:
  *                                  type: string
  *                                  example: 1234567890
+ *                              first_name:
+ *                                  type: string
+ *                                  example: Test
+ *                              last_name:
+ *                                  type: string
+ *                                  example: Patient
+ *                              active_status:
+ *                                  type: boolean
+ *                                  example: true
+ *                              mother_name:
+ *                                  type: string
+ *                                  example: BE
+ *                              employee_id:
+ *                                  type: integer
+ *                                  example: 1
+ *                              createdAt:
+ *                                  type: string
+ *                                  format: date-time
+ *                                  example: 2025-01-28T04:43:08.000Z
+ *                              updatedAt:
+ *                                  type: string
+ *                                  format: date-time
+ *                                  example: 2025-01-28T04:43:08.000Z
+ *                              deletedAt:
+ *                                  type: string
+ *                                  format: date-time
+ *                                  nullable: true
+ *                                  example: null
+ *                              personal_information:
+ *                                  type: object
+ *                                  properties:
+ *                                      id:
+ *                                          type: integer
+ *                                          example: 1
+ *                                      patient_id:
+ *                                          type: integer
+ *                                          example: 1
+ *                                      birth_place:
+ *                                          type: string
+ *                                          example: Purworejo
+ *                                      birth_date:
+ *                                          type: string
+ *                                          format: date
+ *                                          example: 1990-01-01
+ *                                      gender:
+ *                                          type: string
+ *                                          example: Perempuan
+ *                                      blood_type:
+ *                                          type: string
+ *                                          example: A
+ *                                      marital_status:
+ *                                          type: string
+ *                                          example: Single
+ *                                      religion:
+ *                                          type: string
+ *                                          example: Islam
+ *                                      contact_number:
+ *                                          type: string
+ *                                          example: 1234567890
+ *                                      email:
+ *                                          type: string
+ *                                          example: test@example.com
+ *                                      id_type:
+ *                                          type: string
+ *                                          example: KTP
+ *                                      id_number:
+ *                                          type: string
+ *                                          example: 1234567890
+ *                                      employeer:
+ *                                          type: string
+ *                                          example: Company Inc.
+ *                                      education:
+ *                                          type: string
+ *                                          example: D4/S1
+ *                              social_data:
+ *                                  type: object
+ *                                  properties:
+ *                                      id:
+ *                                          type: integer
+ *                                          example: 1
+ *                                      patient_id:
+ *                                          type: integer
+ *                                          example: 1
+ *                                      address:
+ *                                          type: string
+ *                                          example: Test Street
+ *                                      city:
+ *                                          type: string
+ *                                          example: Malinau
+ *                                      postal_code:
+ *                                          type: string
+ *                                          example: 12345
+ *                                      mr_date:
+ *                                          type: string
+ *                                          format: date-time
+ *                                          example: 2025-01-28T00:00:00.000Z
+ *                                      weight:
+ *                                          type: integer
+ *                                          example: 41
+ *                                      ethnicity:
+ *                                          type: string
+ *                                          example: JAWA
+ *                              emergency_contact:
+ *                                  type: object
+ *                                  properties:
+ *                                      id:
+ *                                          type: integer
+ *                                          example: 1
+ *                                      patient_id:
+ *                                          type: integer
+ *                                          example: 1
+ *                                      contact_name:
+ *                                          type: string
+ *                                          example: BE
+ *                                      phone_number:
+ *                                          type: string
+ *                                          example: 1234567890
+ *                                      address:
+ *                                          type: string
+ *                                          example: Test Street
+ *                                      city:
+ *                                          type: string
+ *                                          example: Malinau
+ *                              employee:
+ *                                  type: object
+ *                                  properties:
+ *                                      id:
+ *                                          type: integer
+ *                                          example: 1
+ *                                      name:
+ *                                          type: string
+ *                                          example: John Doe
+ *                                      email:
+ *                                          type: string
+ *                                          example: john.doe@example.com
  *          401:
  *              description: Unauthorized
  *              content:
@@ -232,8 +466,8 @@ router.get('/:id', authMiddleware, patientController.getPatientById);
  * @swagger
  * /api/patient/:
  *  post:
- *      summary: Create a new patient
- *      description: Creates a new patient record
+ *      summary: Create a new outpatient registration
+ *      description: Registers a new outpatient visit for a patient
  *      tags: [Patient]
  *      security:
  *          - bearerAuth: []
@@ -244,21 +478,94 @@ router.get('/:id', authMiddleware, patientController.getPatientById);
  *                  schema:
  *                      type: object
  *                      properties:
- *                          name: 
- *                              type: string
- *                              example: John Doe
- *                          email: 
- *                              type: string
- *                              example: john@example.com
- *                          phone: 
- *                              type: string
- *                              example: 1234567890
- *                          address:
- *                              type: string
- *                              example: 123 Main St
+ *                          patient:
+ *                              type: object
+ *                              properties:
+ *                                  ktp_number:
+ *                                      type: string
+ *                                      example: "1234567890"
+ *                                  first_name:
+ *                                      type: string
+ *                                      example: "Test"
+ *                                  last_name:
+ *                                      type: string
+ *                                      example: "Patient"
+ *                                  mother_name:
+ *                                      type: string
+ *                                      example: "BE"
+ *                          personalInfo:
+ *                              type: object
+ *                              properties:
+ *                                  birth_place:
+ *                                      type: string
+ *                                      example: "Purworejo"
+ *                                  birth_date:
+ *                                      type: string
+ *                                      format: date
+ *                                      example: "1990-01-01"
+ *                                  gender:
+ *                                      type: string
+ *                                      example: "Perempuan"
+ *                                  blood_type:
+ *                                      type: string
+ *                                      example: "A"
+ *                                  marital_status:
+ *                                      type: string
+ *                                      example: "Single"
+ *                                  religion:
+ *                                      type: string
+ *                                      example: "Islam"
+ *                                  contact_number:
+ *                                      type: string
+ *                                      example: "1234567890"
+ *                                  email:
+ *                                      type: string
+ *                                      example: "test@example.com"
+ *                                  id_type:
+ *                                      type: string
+ *                                      example: "KTP"
+ *                                  employeer:
+ *                                      type: string
+ *                                      example: "Company Inc."
+ *                                  education:
+ *                                      type: string
+ *                                      example: "D4/S1"
+ *                          socialData:
+ *                              type: object
+ *                              properties:
+ *                                  address:
+ *                                      type: string
+ *                                      example: "Test Street"
+ *                                  city:
+ *                                      type: string
+ *                                      example: "Malinau"
+ *                                  postal_code:
+ *                                      type: integer
+ *                                      example: 12345
+ *                                  weight:
+ *                                      type: integer
+ *                                      example: 41
+ *                                  ethnicity:
+ *                                      type: string
+ *                                      example: "JAWA"
+ *                          emergencyContact:
+ *                              type: object
+ *                              properties:
+ *                                  contact_name:
+ *                                      type: string
+ *                                      example: "BE"
+ *                                  phone_number:
+ *                                      type: string
+ *                                      example: "1234567890"
+ *                                  address:
+ *                                      type: string
+ *                                      example: "Test Street"
+ *                                  city:
+ *                                      type: string
+ *                                      example: "Malinau"
  *      responses:
  *          201:
- *              description: Patient successfully created
+ *              description: Outpatient registration successfully created
  *              content:
  *                  application/json:
  *                      schema:
@@ -266,7 +573,7 @@ router.get('/:id', authMiddleware, patientController.getPatientById);
  *                          properties:
  *                              message:
  *                                  type: string
- *                                  example: Patient successfully created
+ *                                  example: "Patient successfully created"
  *          400:
  *              description: Invalid input data
  *              content:
@@ -276,7 +583,7 @@ router.get('/:id', authMiddleware, patientController.getPatientById);
  *                          properties:
  *                              message:
  *                                  type: string
- *                                  example: Invalid input data
+ *                                  example: "Invalid input data"
  *          401:
  *              description: Unauthorized
  *              content:
@@ -286,7 +593,7 @@ router.get('/:id', authMiddleware, patientController.getPatientById);
  *                          properties:
  *                              message:
  *                                  type: string
- *                                  example: Unauthorized
+ *                                  example: "Unauthorized"
  *          500:
  *              description: Internal server error
  *              content:
@@ -296,22 +603,30 @@ router.get('/:id', authMiddleware, patientController.getPatientById);
  *                          properties:
  *                              message:
  *                                  type: string
- *                                  example: Internal server error
+ *                                  example: "Internal server error"
  *                              error:
  *                                  type: string
- *                                  example: Error message
+ *                                  example: "Error message"
  */
 router.post('/', authMiddleware, patientController.createPatient);
 
 /**
  * @swagger
- * /api/patient/:
+ * /api/patient/{id}:
  *   put:
  *     summary: Update a patient
  *     description: Update the details of an existing patient.
  *     tags: [Patient]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: The ID of the patient to update
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           example: 1
  *     requestBody:
  *       required: true
  *       content:
@@ -319,27 +634,176 @@ router.post('/', authMiddleware, patientController.createPatient);
  *           schema:
  *             type: object
  *             properties:
- *               name:
- *                 type: string
- *               age:
- *                 type: integer
- *               address:
- *                 type: string
+ *               patient:
+ *                 type: object
+ *                 properties:
+ *                   ktp_number:
+ *                     type: string
+ *                     example: "3456784321"
+ *                   first_name:
+ *                     type: string
+ *                     example: "Test"
+ *                   last_name:
+ *                     type: string
+ *                     example: "Patient"
+ *                   mother_name:
+ *                     type: string
+ *                     example: "COBA"
+ *               personalInfo:
+ *                 type: object
+ *                 properties:
+ *                   birth_place:
+ *                     type: string
+ *                     example: "Purworejo"
+ *                   birth_date:
+ *                     type: string
+ *                     format: date
+ *                     example: "1992-01-08"
+ *                   gender:
+ *                     type: string
+ *                     example: "Laki-laki"
+ *                   blood_type:
+ *                     type: string
+ *                     example: "A"
+ *                   maritial_status:
+ *                     type: string
+ *                     example: "Single"
+ *                   religion:
+ *                     type: string
+ *                     example: "Islam"
+ *                   contact_number:
+ *                     type: string
+ *                     example: "1234567890"
+ *                   email:
+ *                     type: string
+ *                     example: "test@example.com"
+ *                   id_type:
+ *                     type: string
+ *                     example: "KTP"
+ *                   employeer:
+ *                     type: string
+ *                     example: "Company Inc."
+ *                   education:
+ *                     type: string
+ *                     example: "D4/S1"
+ *               socialData:
+ *                 type: object
+ *                 properties:
+ *                   address:
+ *                     type: string
+ *                     example: "Test Street"
+ *                   city:
+ *                     type: string
+ *                     example: "Malinau"
+ *                   postal_code:
+ *                     type: integer
+ *                     example: 12345
+ *                   weight:
+ *                     type: integer
+ *                     example: 41
+ *                   ethnicity:
+ *                     type: string
+ *                     example: "JAWA"
+ *               emergencyContact:
+ *                 type: object
+ *                 properties:
+ *                   contact_name:
+ *                     type: string
+ *                     example: "BE"
+ *                   phone_number:
+ *                     type: string
+ *                     example: "1234567890"
+ *                   address:
+ *                     type: string
+ *                     example: "Test Street"
+ *                   city:
+ *                     type: string
+ *                     example: "Malinau"
  *             example:
- *               name: John Doe
- *               age: 30
- *               address: 123 Main St
+ *               patient:
+ *                 ktp_number: "3456784321"
+ *                 first_name: "Test"
+ *                 last_name: "Patient"
+ *                 mother_name: "COBA"
+ *               personalInfo:
+ *                 birth_place: "Purworejo"
+ *                 birth_date: "1992-01-08"
+ *                 gender: "Laki-laki"
+ *                 blood_type: "A"
+ *                 maritial_status: "Single"
+ *                 religion: "Islam"
+ *                 contact_number: "1234567890"
+ *                 email: "test@example.com"
+ *                 id_type: "KTP"
+ *                 employeer: "Company Inc."
+ *                 education: "D4/S1"
+ *               socialData:
+ *                 address: "Test Street"
+ *                 city: "Malinau"
+ *                 postal_code: 12345
+ *                 weight: 41
+ *                 ethnicity: "JAWA"
+ *               emergencyContact:
+ *                 contact_name: "BE"
+ *                 phone_number: "1234567890"
+ *                 address: "Test Street"
+ *                 city: "Malinau"
  *     responses:
  *       200:
  *         description: Patient updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Patient successfully updated
  *       400:
  *         description: Invalid input
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Invalid input
  *       401:
  *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Unauthorized
  *       404:
  *         description: Patient not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Patient not found
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Internal server error
+ *                 error:
+ *                   type: string
+ *                   example: Error message
  */
-router.put('/', authMiddleware, patientController.updatePatient);
+router.put('/:id', authMiddleware, patientController.updatePatient);
 
 /**
  * @swagger
@@ -360,10 +824,57 @@ router.put('/', authMiddleware, patientController.updatePatient);
  *     responses:
  *       200:
  *         description: Patient deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Patient successfully deleted
+ *       400:
+ *         description: Invalid patient ID
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Invalid patient ID
  *       401:
  *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Unauthorized
  *       404:
  *         description: Patient not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Patient not found
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Internal server error
+ *                 error:
+ *                   type: string
+ *                   example: Error message
  */
 router.delete('/:id', authMiddleware, patientController.deletePatient);
 

@@ -12,6 +12,9 @@ const outpatientRegistrationRoutes = require('./routes/outpatientRegisterRoute')
 const clinicRoutes = require('./routes/clinicRoute');
 const doctorRoutes = require('./routes/doctorRoute');
 const tariffReferenceRoutes = require('./routes/tariffReferenceRoute');
+const employeeRoutes = require('./routes/employeeRoute');
+
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 app.use(cors());
@@ -26,12 +29,12 @@ app.use('/api/outpatient-register', outpatientRegistrationRoutes);
 app.use('/api/clinic', clinicRoutes);
 app.use('/api/doctor', doctorRoutes);
 app.use('/api/tariff-reference', tariffReferenceRoutes);
+app.use('/api/employee', employeeRoutes);
 
 // Test DB connection
 sequelize
   .authenticate()
   .then(() => console.log('Database connected'))
-  .catch((err) => console.error('Unable to connect to database:', err));
+  .catch((error) => console.error('Unable to connect to database:', error));
 
-const PORT = 3000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
