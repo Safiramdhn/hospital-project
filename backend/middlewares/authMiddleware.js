@@ -21,7 +21,7 @@ const authMiddleware = (req, res, next) => {
       email: decoded.email,
     };
 
-    logger.info(`User with ID ${decoded.id} accessed ${req.originalUrl}`);
+    logger.info(`accessed ${req.originalUrl}`);
     next();
   } catch (error) {
     logger.error(`Invalid token for request: ${req.originalUrl}`);

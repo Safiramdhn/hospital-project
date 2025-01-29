@@ -71,16 +71,20 @@ const create = async (patient, personalInfo, socialData, emergencyContact) => {
 };
 
 const findByCredential = async (patient_credential) => {
-  return await Patient.findOne({
-    where: {
-      [Sequelize.Op.or]: [{ ktp_number: patient_credential }, { mr_number: patient_credential }],
-    },
-    include: [
-      { model: PatientPersonalInfo, as: 'personal_information' },
-      { model: PatientSocialData, as: 'social_data' },
-      { model: PatientEmergencyContact, as: 'emergency_contact' },
-    ],
-  });
+  try {
+    return await Patient.findOne({
+      where: {
+        [Sequelize.Op.or]: [{ ktp_number: patient_credential }, { mr_number: patient_credential }],
+      },
+      include: [
+        { model: PatientPersonalInfo, as: 'personal_information' },
+        { model: PatientSocialData, as: 'social_data' },
+        { model: PatientEmergencyContact, as: 'emergency_contact' },
+      ],
+    });
+  } catch (error) {
+    throw new Error(`Error finding patient with credential ${patient_credential}, ${error}`);
+  }
 };
 
 const update = async (id, patient, personalInfo, socialData, emergencyContact) => {

@@ -14,7 +14,12 @@ const getPatientByCredentialService = async (patient_credential) => {
   if (!patient_credential || patient_credential === '') {
     throw new Error('Invalid patient credential value');
   }
-  return await patientRepo.findByCredential(patient_credential);
+  try {
+    const patient = await patientRepo.findByCredential(patient_credential);
+    return patient;
+  } catch (error) {
+    throw new Error(`Invalid patient credential value: ${error.message}`);
+  }
 };
 
 const createPatientService = async (patient, personalInfo, socialData, emergencyContact) => {
