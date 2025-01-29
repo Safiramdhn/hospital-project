@@ -24,7 +24,7 @@ const LoginPage = () => {
         localStorage.setItem('Authorization', token);
   
         // Redirect to outpatient registration page
-        window.location.href = '/outpatient-registration';
+        window.location.href = '/outpatient-registration-form';
       } else if (response.data && response.data.message) {
         alert(response.data.message);
         setEmail('');

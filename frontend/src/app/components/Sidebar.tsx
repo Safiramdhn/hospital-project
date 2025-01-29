@@ -75,7 +75,8 @@ const SideBar: React.FC = () => {
 
       <nav className="px-4 py-4">
         <ul className="space-y-2">
-          <NavItem href="/outpatient-registration" icon="/enrollment_17386533.png" label="Outpatient Registration Form" />
+          <NavItem href="/outpatient-registration-form" icon="/enrollment_17386533.png" label="Outpatient Registration Form" />
+          <NavItem href="/outpatient-list" icon="/calendar_11815700.png" label='Outpatient List' />
           <NavItem href="/patients" icon="/medical_1512910.png" label="Patient List" />
         </ul>
       </nav>

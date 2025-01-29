@@ -241,7 +241,6 @@ const OutpatientRegistrationForm: React.FC = () => {
   return (
     <div className="p-6 bg-white shadow-lg rounded-lg w-full max-w-2xl mx-auto">
       <h2 className="text-xl font-semibold mb-4">Pendaftaran Rawat Jalan</h2>
-      {message && <p className="text-red-500">{message}</p>}
 
       <div>
         <label className="block text-sm font-medium">Cari Pasien</label>
@@ -256,6 +255,8 @@ const OutpatientRegistrationForm: React.FC = () => {
       <button type="button" onClick={handlePatientSearch} className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition my-4">
         Cari Pasien
       </button>
+
+      {message && <p className="text-red-500">{message}</p>}
 
       <form onSubmit={handleSubmit} className="space-y-4 border-t-4 border-gray-200 p-2">
         {/* Register Section */}
