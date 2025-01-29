@@ -40,14 +40,15 @@ const getPatientById = async (req, res) => {
     res.status(200).json(patient);
   } catch (error) {
     // Handle server errors
-    logger.error(`Error retrieving patient: ${error.message}`);
-    res.status(500).json({ message: 'Internal server error', error: error.message });
+    logger.error(`Error retrieving patient with ID ${patientId}: ${error.message}`);
+    res.status(500).json({ message: 'Internal server error'});
   }
 };
 
 // find by patient credentials
 const findPatientByCredentials = async (req, res) => {
   const { patient_credential } = req.body;
+  
   try {
     const patient = await patientService.getPatientByCredentialService(patient_credential);
 
@@ -59,10 +60,11 @@ const findPatientByCredentials = async (req, res) => {
     logger.info('Successfully retrieved patient by credentials');
     return res.status(200).json({ patient });
   } catch (error) {
-    logger.error(`Error retrieving patient: ${error.message}`);
+    logger.error(`Error retrieving patient with the credential: ${error.message}`); // Fix: access error.message
     return res.status(500).json({ message: 'Internal server error.' });
   }
 };
+
 
 //   create new patient
 const createPatient = async (req, res) => {

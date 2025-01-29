@@ -11,3 +11,7 @@ const getEmployee = async (id) => {
         throw new Error('Error retrieving employee data:'+ error.message);
     }
 }
+
+module.exports = {
+    getEmployee,
+};
