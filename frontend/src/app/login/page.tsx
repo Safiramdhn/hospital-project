@@ -15,15 +15,18 @@ const LoginPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${apiURL}/auth/login`, { email, password });
-      // save token in cookies
-      if (response.data && response.data.token !== '') {
-        axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
-        // Redirect to outpatient form
+      const response = await axios.post(apiURL + '/auth/login', { email, password });
+  
+      if (response.data && response.data.token) {
+        const token = response.data.token;
+  
+        // Store token in local storage (less secure)
+        localStorage.setItem('Authorization', token);
+  
+        // Redirect to outpatient registration page
         window.location.href = '/outpatient-registration';
-      } else if (response.data && response.data.message !== '') {
+      } else if (response.data && response.data.message) {
         alert(response.data.message);
-        // clear form fields
         setEmail('');
         setPassword('');
       }
@@ -36,7 +39,6 @@ const LoginPage = () => {
       }
     }
   };
-
   return (
     <div className="min-h-screen bg-mint-100">
       <LoginHeaderComponent />

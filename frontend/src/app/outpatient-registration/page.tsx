@@ -1,32 +1,32 @@
+'use client';
 import React from 'react';
+import MainHeader from '../components/Header';
+import SideBar from '../components/Sidebar';
+import OutpatientRegistrationForm from './OutpatientRegisterForm';
+import useAuth from '../hooks/Auth';
 
-const OutpatientRegistrationPage: React.FC = () => {
+const OutpatientRegistrationPage = () => {
+    const isAuthenticated = useAuth();
+    
+    if (!isAuthenticated) {
+        return <div>You are not authenticated. Please login to access this page.</div>;
+    }
+
     return (
-        <div>
-            <h1>Outpatient Registration</h1>
-            <form>
-                <div>
-                    <label htmlFor="name">Name:</label>
-                    <input type="text" id="name" name="name" required />
+        <div className="h-screen flex flex-col">
+            {/* Header Section */}
+            <MainHeader />
+
+            {/* Sidebar + Content Wrapper */}
+            <div className="flex flex-1">
+                {/* Sticky Sidebar */}
+                <SideBar />
+
+                {/* Scrollable Main Content */}
+                <div className="flex-1 overflow-auto p-6">
+                    <OutpatientRegistrationForm />
                 </div>
-                <div>
-                    <label htmlFor="age">Age:</label>
-                    <input type="number" id="age" name="age" required />
-                </div>
-                <div>
-                    <label htmlFor="gender">Gender:</label>
-                    <select id="gender" name="gender" required>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                <div>
-                    <label htmlFor="contact">Contact Number:</label>
-                    <input type="tel" id="contact" name="contact" required />
-                </div>
-                <button type="submit">Register</button>
-            </form>
+            </div>
         </div>
     );
 };
