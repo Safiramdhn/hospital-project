@@ -1,4 +1,6 @@
-const { OutPatientRegistration, BillingDetail, ServiceDetail, VisitDetail } = require('../models/outpatientRegistration');
+const { OutPatientRegistration, BillingDetail, ServiceDetail, VisitDetail, Clinic } = require('../models/outpatientRegistration');
+const { Patient } = require('../models/patients');
+const { Doctor} = require('../models/users');
 
 const create = async (register, service_detail, billing_detail, visit_detail) => {
   const transaction = await OutPatientRegistration.sequelize.transaction();
@@ -47,8 +49,26 @@ const findByQueueNumber = async (queueNumber) => {
   });
 };
 
+const findAll = async (filter) => {
+  return await OutPatientRegistration.findAll({
+    where: filter,
+    include: [
+      { model: ServiceDetail, as: 'service_detail', include: [
+        { model: Clinic, as: 'clinic' },
+        { model: Doctor, as: 'doctor' },
+      ] },
+      { model: VisitDetail, as: 'visit_detail' },
+      { model: BillingDetail, as: 'billing_detail' },
+      { model: Patient, as: 'patient' },
+    ],
+    order: [['visit_date', 'DESC']],
+  });
+};
+
+
 module.exports = {
   create,
   findByID,
   findByQueueNumber,
+  findAll,
 };

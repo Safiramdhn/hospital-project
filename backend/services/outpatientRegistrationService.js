@@ -42,8 +42,18 @@ const findPatientRegistrationByQueueNumber = async (queueNumber) => {
   }
 };
 
+const getOutpatients = async (filter) => {
+  try {
+    const result = await outpatientRegistrationRepo.findAll(filter);
+    return result;
+  } catch (error) {
+    throw new Error('Could not retrieve outpatient registrations: ' + error.message);
+  }
+}
+
 module.exports = {
   createOutPatientRegistration,
   findRegisterByID,
   findPatientRegistrationByQueueNumber,
+  getOutpatients,
 };

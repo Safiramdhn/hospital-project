@@ -1,6 +1,8 @@
 const outpatientRegistrationService = require('../services/outpatientRegistrationService');
 const logger = require('../utils/logger');
 
+const { Op } = require('sequelize');
+
 // create new outpatient registration
 const createOutPatientRegistration = async (req, res) => {
   let { register, service_detail, billing_detail, visit_detail } = req.body;
@@ -54,7 +56,41 @@ const getOutPatientRegistration = async (req, res) => {
   }
 };
 
+// get all registered outpatients with filter
+const getAllOutPatientRegistration = async (req, res) => {
+  let { patient_name, doctor_name, clinic_name, registration_number, booking_number } = req.query;
+
+  let filter = {};
+
+  if (patient_name) {
+    filter['$patient.first_name$'] = { [Op.like]: `%${patient_name}%` };
+  }
+  if (doctor_name) {
+    filter['$service_detail.doctor.name$'] = { [Op.like]: `%${doctor_name}%` };
+  }
+  
+  if (clinic_name) {
+    filter['$service_detail.clinic.name$'] = { [Op.like]: `%${clinic_name}%` };
+  }
+  if (registration_number) {
+    filter.registration_number = parseInt(registration_number);
+  }
+  if (booking_number) {
+    filter.booking_number = parseInt(booking_number);
+  }
+
+  try {
+    const outpatientRegistrations = await outpatientRegistrationService.getOutpatients(filter);
+    logger.info('Successfully retrieved all outpatient registrations');
+    res.status(200).json(outpatientRegistrations);
+  } catch (error) {
+    logger.error(`Error retrieving all outpatient registrations: ${error.message}`);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createOutPatientRegistration,
   getOutPatientRegistration,
+  getAllOutPatientRegistration,
 };

@@ -1,6 +1,7 @@
 const { Model, DataTypes } = require('sequelize');
 const db = require('../../config/database');
 const moment = require('moment');
+const {Patient} = require('../patients');
 
 class OutPatientRegistration extends Model {}
 
@@ -52,5 +53,10 @@ OutPatientRegistration.init(
     },
   }
 );
+
+// relation association
+
+OutPatientRegistration.belongsTo(Patient, { foreignKey: 'patient_id', as: 'patient' });
+Patient.hasMany(OutPatientRegistration, { foreignKey: 'patient_id', as: 'outpatient' });
 
 module.exports = OutPatientRegistration;
