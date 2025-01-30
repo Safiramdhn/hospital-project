@@ -98,7 +98,7 @@ const updatePatient = async (req, res) => {
     return res.status(400).json({ message: 'Patient ID is required' });
   }
 
-  let { patient, personalInfo, socialData, emergencyContact } = req.body;
+  let { patient, personal_information, social_data, emergency_contact } = req.body;
   try {
     const patientId = parseInt(id);
     if (!req.user || !req.user.id) {
@@ -108,7 +108,7 @@ const updatePatient = async (req, res) => {
 
     patient.employee_id = req.user.id; // Set the employee_id from the token
     console.log(patient.employee_id);
-    const updatedPatient = await patientService.updatePatientService(patientId, patient, personalInfo, socialData, emergencyContact);
+    const updatedPatient = await patientService.updatePatientService(patientId, patient, personal_information, social_data, emergency_contact);
     if (!updatedPatient) {
       logger.error('Patient not found');
       return res.status(404).json({ message: 'Patient not found' });

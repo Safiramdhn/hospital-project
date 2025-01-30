@@ -96,18 +96,31 @@ const update = async (id, patient, personalInfo, socialData, emergencyContact) =
     }
 
     await patientToUpdate.update(patient, { transaction });
-    await patientToUpdate.update(personalInfo, { transaction });
-    await patientToUpdate.update(socialData, { transaction });
-    if (emergencyContact && emergencyContact.phone_number !== 0) {
-      await patientToUpdate.update(emergencyContact, { transaction });
+
+    await PatientPersonalInfo.update(personalInfo, {
+      where: { patient_id: id },
+      transaction
+    });
+
+    await PatientSocialData.update(socialData, {
+      where: { patient_id: id },
+      transaction
+    });
+
+    if (emergencyContact?.phone_number) {
+      await PatientEmergencyContact.update(emergencyContact, {
+        where: { patient_id: id },
+        transaction
+      });
     }
+
     await transaction.commit();
     return patientToUpdate;
   } catch (error) {
     if (!transaction.finished) {
       await transaction.rollback();
     }
-    throw error(`Error updating patient with id ${id}, ${error.message}`);
+    throw new Error(`Error updating patient with id ${id}: ${error.message}`);
   }
 };
 

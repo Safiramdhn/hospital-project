@@ -13,7 +13,7 @@ PatientPersonalInfo.init(
     gender: { type: DataTypes.ENUM('Perempuan', 'Laki-laki', 'Lain-lain'), allowNull: false },
     blood_type: { type: DataTypes.ENUM('A', 'B', 'O', 'AB'), allowNull: false },
     maritial_status: { type: DataTypes.ENUM('Menikah', 'Single', 'Duda/Janda'), allowNull: false },
-    religion: { type: DataTypes.ENUM('Islam', 'Kristen', 'Katolic', 'Hindu', 'Budha', 'Lain-lain') },
+    religion: { type: DataTypes.ENUM('Islam', 'Kristen', 'Katolik', 'Hindu', 'Budha', 'Lain-lain') },
     contact_number: { type: DataTypes.STRING, allowNull: false },
     email: { type: DataTypes.STRING, allowNull: true },
     id_type: { type: DataTypes.ENUM('KTP', 'Passport'), allowNull: false },

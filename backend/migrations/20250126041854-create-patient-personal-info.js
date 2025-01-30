@@ -18,7 +18,7 @@ module.exports = {
       gender: { type: Sequelize.ENUM('Perempuan', 'Laki-laki', 'Lain-lain'), allowNull: false },
       blood_type: { type: Sequelize.ENUM('A', 'B', 'O', 'AB'), allowNull: false },
       maritial_status: { type: Sequelize.ENUM('Menikah', 'Single', 'Duda/Janda'), allowNull: false },
-      religion: { type: Sequelize.ENUM('Islam', 'Kristen', 'Katolic', 'Hindu', 'Budha', 'Lain-lain') },
+      religion: { type: Sequelize.ENUM('Islam', 'Kristen', 'Katolik', 'Hindu', 'Budha', 'Lain-lain') },
       contact_number: { type: Sequelize.STRING, allowNull: false },
       email: { type: Sequelize.STRING, allowNull: true },
       id_type: { type: Sequelize.ENUM('KTP', 'Passport'), allowNull: false },

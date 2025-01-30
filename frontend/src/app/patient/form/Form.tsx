@@ -53,13 +53,6 @@ interface EmergencyContact {
   city?: string;
 }
 
-interface NewPatient {
-  patient: Patient
-  personal_information: PersonalInformation;
-  social_data: SocialData;
-  emergency_contact: EmergencyContact;
-}
-
 const PatientForm: React.FC = () => {
   const router = useRouter();
   const param = useSearchParams();
@@ -85,8 +78,6 @@ const PatientForm: React.FC = () => {
     emergency_contact: {},
   });
 
-  const [newPatient, setNewPatient] = useState<NewPatient | null>(null);
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -95,10 +86,23 @@ const PatientForm: React.FC = () => {
       if (parsedID) {
         setLoading(true);
         try {
-          const response = await fetch(`${apiURL}/patients/${parsedID}`);
+          const response = await fetch(`${apiURL}/patient/${parsedID}`, {
+            headers:{
+              contentType: 'application/json',
+              Authorization: `Bearer ${localStorage.getItem('Authorization')}`,
+            }
+          });
           if (!response.ok) throw new Error('Failed to fetch patient data');
           const data = await response.json();
-          setInput(data);
+          setInput({
+            ...data,
+            patient: {
+              first_name: data.first_name,
+              last_name: data.last_name,
+              ktp_number: data.ktp_number,
+              mother_name: data.mother_name,
+            }
+          });
         } catch (err: any) {
           setError(err.message);
         } finally {
@@ -111,6 +115,10 @@ const PatientForm: React.FC = () => {
       fetchPatient();
     }
   }, [parsedID]);
+
+  useEffect(() =>{
+    console.log("Patient data", input)
+  }, [input]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();

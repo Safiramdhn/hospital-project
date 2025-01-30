@@ -101,7 +101,7 @@ const PatientListComponent: React.FC = () => {
   }, []);
 
   const handleEdit = (id: number) => {
-    router.push(`/patient/form/${id}`);
+    router.push(`/patient/form?id=${id}`);
   };
 
   const handleDelete = async (id: number) => {
