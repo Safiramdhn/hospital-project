@@ -107,7 +107,12 @@ const PatientListComponent: React.FC = () => {
   const handleDelete = async (id: number) => {
     if (window.confirm('Are you sure you want to delete this patient?')) {
       try {
-        await axios.delete(`${apiURL}/patient/${id}`);
+        await axios.delete(`${apiURL}/patient/${id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('Authorization')}`,
+            'Content-Type': 'application/json',
+          },
+        });
         setPatients(patients.filter((patient) => patient.id !== id));
       } catch (err: any) {
         setError('Failed to delete patient');

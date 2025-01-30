@@ -23,7 +23,6 @@ const useAuth = () => {
             }
         }
     }, [router]);
-
     return isAuthenticated;
 };
 

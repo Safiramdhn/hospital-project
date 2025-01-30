@@ -46,7 +46,7 @@ interface FormData {
   };
   billing_detail: {
     treatment: string;
-    discount: string;
+    discount: number;
   };
   visit_detail: {
     class_type: 'NON' | 'CLASS_A' | 'CLASS_B'; // Adjust the types as needed
@@ -72,7 +72,7 @@ const OutpatientRegistrationForm: React.FC = () => {
     },
     billing_detail: {
       treatment: '',
-      discount: '',
+      discount: 0,
     },
     visit_detail: {
       class_type: 'NON',
@@ -230,6 +230,30 @@ const OutpatientRegistrationForm: React.FC = () => {
 
       const data = await response.json();
       setMessage(`${data.message}, queue number: ${data.queue_number}`);
+
+      // unset the form fields
+      setFormData({register: {
+        patient_id: 0,
+        session: 'Fullday',
+        notes: '',
+        visit_date: '',
+      },
+      service_detail: {
+        clinic_code: '',
+        doctor_code: '',
+      },
+      billing_detail: {
+        treatment: '',
+        discount: 0,
+      },
+      visit_detail: {
+        class_type: 'NON',
+        insurance_type: 'UMUM',
+        insurance_number: '',
+        guarantor: '',
+        entry_method: 'Datang Sendiri',
+        tariff_code: '',
+      },});
     } catch (error) {
       setMessage('Error submitting form. Please try again.');
       console.error(error);
