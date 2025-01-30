@@ -4,20 +4,23 @@ import jwt from 'jsonwebtoken';
 export function validateToken(token: string): boolean {
     try {
         if (!token) {
-            throw new Error('Token not provided');
+            console.log('Token not provided');
+            return false
         }
 
         // Decode the token without verifying the signature
         const decoded: any = jwt.decode(token);
 
         if (!decoded || !decoded.exp) {
-            throw new Error('Invalid token or no expiration field');
+            console.log('Invalid token or no expiration field');
+            return false
         }
 
         // Check if the token is expired
         const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
         if (decoded.exp < currentTime) {
-            throw new Error('Token expired');
+            console.log('Token expired');
+            return false
         }
 
         return true;

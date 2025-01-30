@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
-import MainHeader from '../components/Header';
-import SideBar from '../components/Sidebar';
+import MainHeaderComponent from '../components/Header';
+import SideBarComponent from '../components/Sidebar';
 import OutpatientRegistrationForm from './OutpatientRegisterForm';
 import useAuth from '../hooks/Auth';
 
@@ -15,12 +15,12 @@ const OutpatientRegistrationPage = () => {
     return (
         <div className="h-screen flex flex-col">
             {/* Header Section */}
-            <MainHeader />
+            <MainHeaderComponent />
 
             {/* Sidebar + Content Wrapper */}
             <div className="flex flex-1">
                 {/* Sticky Sidebar */}
-                <SideBar />
+                <SideBarComponent />
 
                 {/* Scrollable Main Content */}
                 <div className="flex-1 overflow-auto p-6">

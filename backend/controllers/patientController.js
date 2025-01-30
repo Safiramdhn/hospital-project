@@ -68,7 +68,8 @@ const findPatientByCredentials = async (req, res) => {
 
 //   create new patient
 const createPatient = async (req, res) => {
-  let { patient, personalInfo, socialData, emergencyContact } = req.body;
+  console.log('createPatient, req.body:', req.body);
+  let { patient, personal_information, social_data, emergency_contact } = req.body;
 
   try {
     // Ensure req.user is set by the auth middleware
@@ -80,7 +81,7 @@ const createPatient = async (req, res) => {
 
     patient.employee_id = req.user.id; // Set the employee_id from the token
 
-    const createdPatient = await patientService.createPatientService(patient, personalInfo, socialData, emergencyContact);
+    const createdPatient = await patientService.createPatientService(patient, personal_information, social_data, emergency_contact);
 
     logger.info('Patient successfully created with ID', createdPatient.id);
     res.status(201).json({ message: 'Patient successfully created' });

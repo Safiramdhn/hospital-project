@@ -29,6 +29,7 @@ const createPatientService = async (patient, personalInfo, socialData, emergency
   personalInfo.id_number = patient.ktp_number;
 
   socialData.mr_date = moment().format('YYYY-MM-DD');
+  console.log('tipe data', typeof patient)
   return await patientRepo.create(patient, personalInfo, socialData, emergencyContact);
 };
 

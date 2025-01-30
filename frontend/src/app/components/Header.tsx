@@ -1,7 +1,7 @@
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
-const MainHeader: React.FC = () => {
+const MainHeaderComponent: React.FC = () => {
   const router = useRouter();
 
   const handleLogout = () => {
@@ -32,4 +32,4 @@ const MainHeader: React.FC = () => {
   );
 };
 
-export default MainHeader;
+export default MainHeaderComponent;
