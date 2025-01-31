@@ -53,7 +53,7 @@ const OutpatientRegistrationForm: React.FC = () => {
       setPatientData(result.patient);
     } catch (error: unknown) {
       console.error('Error searching patient:', error);
-  
+
       // Type narrowing to safely access error.message
       let errorMessage = 'Error searching patient'; // Default message
       if (error instanceof Error) {
@@ -61,7 +61,7 @@ const OutpatientRegistrationForm: React.FC = () => {
       } else if (typeof error === 'string') {
         errorMessage = error;
       }
-  
+
       setMessage(errorMessage);
     }
   };
@@ -74,7 +74,7 @@ const OutpatientRegistrationForm: React.FC = () => {
         setClinic(result);
       } catch (error: unknown) {
         console.error('Error searching clinics:', error);
-    
+
         // Type narrowing to safely access error.message
         let errorMessage = 'Error searching clinics'; // Default message
         if (error instanceof Error) {
@@ -91,7 +91,7 @@ const OutpatientRegistrationForm: React.FC = () => {
         setDoctors(result);
       } catch (error: unknown) {
         console.error('Error searching doctors:', error);
-    
+
         // Type narrowing to safely access error.message
         let errorMessage = 'Error searching doctors'; // Default message
         if (error instanceof Error) {
@@ -108,7 +108,7 @@ const OutpatientRegistrationForm: React.FC = () => {
         setTariffs(result);
       } catch (error: unknown) {
         console.error('Error searching tariffs:', error);
-    
+
         // Type narrowing to safely access error.message
         let errorMessage = 'Error searching tariffs'; // Default message
         if (error instanceof Error) {
@@ -331,7 +331,7 @@ const OutpatientRegistrationForm: React.FC = () => {
           <input
             type="number"
             name="billing_detail.discount"
-            value={formData.billing_detail.discount || 0}
+            value={formData.billing_detail.discount}
             onChange={handleChange}
             className="border p-2 w-full rounded-md shadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none"
           />
@@ -458,7 +458,7 @@ const OutpatientRegistrationForm: React.FC = () => {
 
             {/* Total Discount Fee */}
             <p>
-              Diskon:{' '}
+              Total Diskon:{' '}
               {(() => {
                 const selectedTariff = tariffs.find((tariff) => tariff.tariff_code === formData.visit_detail.tariff_code);
 
@@ -467,7 +467,7 @@ const OutpatientRegistrationForm: React.FC = () => {
                   const baseExaminationFee = selectedTariff.base_examination_fee;
                   const discountPercentage = formData.billing_detail.discount || 0;
                   const totalDiscount = ((parseFloat(baseRegistrationFee) + parseFloat(baseExaminationFee)) * discountPercentage) / 100;
-                  return totalDiscount; // Convert to string for display
+                  return totalDiscount;
                 } else {
                   return '0.00';
                 }
@@ -484,8 +484,9 @@ const OutpatientRegistrationForm: React.FC = () => {
                   const baseRegistrationFee = selectedTariff.base_registration_fee;
                   const baseExaminationFee = selectedTariff.base_examination_fee;
                   const discountPercentage = formData.billing_detail.discount || 0;
-                  const totalPayment = ((parseFloat(baseRegistrationFee) + parseFloat(baseExaminationFee)) * discountPercentage) / 100;
-                  return totalPayment; // Convert to string for display
+                  const totalDiscount = ((parseFloat(baseRegistrationFee) + parseFloat(baseExaminationFee)) * discountPercentage) / 100;
+                  const totalPayment = parseFloat(baseRegistrationFee) + parseFloat(baseExaminationFee)
+                  return totalDiscount > 0 ? totalPayment - totalDiscount : totalPayment; 
                 } else {
                   return '0.00';
                 }

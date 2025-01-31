@@ -10,13 +10,17 @@ module.exports = {
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
     await queryInterface.createTable('billing_details', {
-      id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
+      id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
       registration_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
           model: 'outpatient_registrations',
-          key: 'id',
+          field: 'id',
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
@@ -28,18 +32,22 @@ module.exports = {
       registration_fee: {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: true,
+        defaultValue: 0.0,
       },
       examination_fee: {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: true,
+        defaultValue: 0.0,
       },
       total_fee: {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: true,
+        defaultValue: 0.0,
       },
       discount: {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: true,
+        defaultValue: 0.0,
       },
       total_payment: {
         type: Sequelize.DECIMAL(10, 2),
@@ -52,15 +60,18 @@ module.exports = {
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        defaultValue: Sequelize.fn('NOW'),
       },
       updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
+        defaultValue: Sequelize.fn('NOW'),
       },
-      deleted_at: { type: Sequelize.DATE, allowNull: true },
+      deleted_at: {
+        type: Sequelize.DATE,
+        allowNull: true,
+      },
     });
   },
-  async down(queryInterface, Sequelize){}
+  async down(queryInterface, Sequelize) {},
 };

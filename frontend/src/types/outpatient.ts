@@ -37,7 +37,7 @@ export interface OutPatientRegistration {
     };
     billing_detail: {
         treatment: string;
-        discount: number;
+        discount: 0;
     };
     visit_detail: {
         class_type: 'NON' | 'VIP'

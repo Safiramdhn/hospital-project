@@ -10,43 +10,50 @@ module.exports = {
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
     await queryInterface.createTable('tariff_references', {
-      id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
+      id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+      },
       tariff_code: {
         type: Sequelize.STRING(10),
         allowNull: false,
-        unique: true,
+        unique: true
       },
       category: {
         type: Sequelize.STRING(50),
-        allowNull: false,
+        allowNull: false
       },
       description: {
         type: Sequelize.STRING(100),
-        allowNull: false,
+        allowNull: false
       },
       base_registration_fee: {
         type: Sequelize.DECIMAL(10, 2),
-        allowNull: false,
+        allowNull: false
       },
       base_examination_fee: {
         type: Sequelize.DECIMAL(10, 2),
-        allowNull: false,
+        allowNull: false
       },
       is_active: {
         type: Sequelize.BOOLEAN,
-        defaultValue: true,
+        defaultValue: true
       },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        defaultValue: Sequelize.fn('NOW')
       },
       updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
+        defaultValue: Sequelize.fn('NOW')
       },
-      deleted_at: { type: Sequelize.DATE, allowNull: true },
+      deleted_at: {
+        type: Sequelize.DATE,
+        allowNull: true
+      }
     });
 
     await queryInterface.addIndex('tariff_references', ['tariff_code'], { unique: true });

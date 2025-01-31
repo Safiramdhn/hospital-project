@@ -14,20 +14,20 @@ module.exports = {
       patient_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Patients',
+          model: 'patients',
           key: 'id',
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      contact_name: { type: Sequelize.STRING, allowNul: false },
-      phone_number: { type: Sequelize.STRING, allowNul: false },
-      address: { type: Sequelize.STRING, allowNul: false },
-      city: { type: Sequelize.STRING, allowNul: false },
+      contact_name: { type: Sequelize.STRING, allowNull: false },
+      phone_number: { type: Sequelize.STRING, allowNull: false },
+      address: { type: Sequelize.STRING, allowNull: false },
+      city: { type: Sequelize.STRING, allowNull: false },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.fn('NOW'), // Sets default value to current timestamp
+        defaultValue: Sequelize.fn('NOW'),
       },
       updated_at: {
         type: Sequelize.DATE,

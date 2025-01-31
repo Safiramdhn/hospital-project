@@ -10,10 +10,24 @@ module.exports = {
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
     await queryInterface.createTable('employees', {
-      id: { type: Sequelize.INTEGER, autoIncrement: true, unique: true, primaryKey: true},
-      name: { type: Sequelize.STRING, allowNull: false },
-      email: { type: Sequelize.STRING, allowNull: false },
-      password: { type: Sequelize.STRING, allowNull: false },
+      id: { 
+        type: Sequelize.INTEGER, 
+        autoIncrement: true, 
+        unique: true, 
+        primaryKey: true 
+      },
+      name: { 
+        type: Sequelize.STRING, 
+        allowNull: false 
+      },
+      email: { 
+        type: Sequelize.STRING, 
+        allowNull: false 
+      },
+      password: { 
+        type: Sequelize.STRING, 
+        allowNull: false 
+      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -24,7 +38,10 @@ module.exports = {
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
       },
-      deleted_at: { type: Sequelize.DATE, allowNull: true },
+      deleted_at: { 
+        type: Sequelize.DATE, 
+        allowNull: true 
+      },
     });
   },
   async down(queryInterface, Sequelize){}
