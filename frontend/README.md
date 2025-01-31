@@ -3,10 +3,10 @@
 Aplikasi ini dirancang untuk memfasilitasi proses pendaftaran pasien rawat jalan di fasilitas kesehatan. Aplikasi ini mencakup alur kerja mulai dari login, verifikasi pasien, hingga pendaftaran pasien dan pengambilan nomor antrian. Aplikasi ini dibangun dengan teknologi modern untuk memastikan keandalan dan skalabilitas.
 
 # Flowchart
+![Screenshot 2025-01-31 182055](https://github.com/user-attachments/assets/c01d6013-d752-4ffb-9ff0-8461f2e2f51b)
 
-![image.png](attachment:a64ac7ff-470b-444c-871f-91059d45a283:image.png)
-
-# Database Structure
+# Database Structure![Uploading Screenshot 2025-01-31 182055.png…]()
+![hospital](https://github.com/user-attachments/assets/e8e1fa72-7028-402d-8aff-98c18c090957)
 
 ![hospital.png](attachment:631ff224-364a-498d-b2a1-c1ddc4ae7e88:hospital.png)
 
