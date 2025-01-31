@@ -4,11 +4,10 @@ Aplikasi ini dirancang untuk memfasilitasi proses pendaftaran pasien rawat jalan
 
 # Flowchart
 
-![image.png](attachment:a64ac7ff-470b-444c-871f-91059d45a283:image.png)
+![Screenshot 2025-01-31 182055](https://github.com/user-attachments/assets/dbe1db12-fa78-44a1-a1cb-755ff98c5a9b)
 
 # Database Structure
-
-![hospital.png](attachment:631ff224-364a-498d-b2a1-c1ddc4ae7e88:hospital.png)
+![hospital](https://github.com/user-attachments/assets/007d6a47-7503-487c-89ca-949c8bb23063)
 
 # Struktur Project
 
