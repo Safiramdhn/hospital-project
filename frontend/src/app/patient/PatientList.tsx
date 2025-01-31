@@ -7,72 +7,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Tooltip } from 'react-tooltip';
 
-import { Patient } from '../types/patient/patient';
+import { Patient } from '../../../types/patient/patient'; 
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
-
-// interface Patient {
-//   id: number;
-//   mr_number: string;
-//   ktp_number: string;
-//   first_name: string;
-//   last_name: string;
-//   active_status: boolean;
-//   mother_name: string;
-//   employee_id: number;
-//   createdAt: string;
-//   updatedAt: string;
-//   deletedAt: string | null;
-//   personal_information: PersonalInformation;
-//   social_data: SocialData;
-//   emergency_contact: EmergencyContact;
-// }
-
-// interface PersonalInformation {
-//   id: number;
-//   patient_id: number;
-//   birth_place: string;
-//   birth_date: string;
-//   gender: string;
-//   blood_type: string;
-//   maritial_status: string;
-//   religion: string;
-//   contact_number: string;
-//   email: string;
-//   id_type: string;
-//   id_number: string;
-//   employeer: string;
-//   education: string;
-//   createdAt: string;
-//   updatedAt: string;
-//   deletedAt: string | null;
-// }
-
-// interface SocialData {
-//   id: number;
-//   patient_id: number;
-//   address: string;
-//   city: string;
-//   postal_code: string;
-//   mr_date: string;
-//   weight: number;
-//   ethnicity: string;
-//   createdAt: string;
-//   updatedAt: string;
-//   deletedAt: string | null;
-// }
-
-// interface EmergencyContact {
-//   id: number;
-//   patient_id: number;
-//   contact_name: string;
-//   phone_number: string;
-//   address: string;
-//   city: string;
-//   createdAt: string;
-//   updatedAt: string;
-//   deletedAt: string | null;
-// }
 
 const PatientListComponent: React.FC = () => {
   const [patients, setPatients] = useState<Patient[]>([]);

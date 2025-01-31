@@ -2,10 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import { Patient } from '@/app/types/patient/patient';
-import { PersonalInformation } from '@/app/types/patient/personalInformation';
-import { SocialData } from '@/app/types/patient/socialData';
-import { EmergencyContact } from '@/app/types/patient/emergencyContact';
+import { Patient } from '../../../../types/patient/patient';
+import { PersonalInformation } from '../../../../types/patient/personalInformation';
+import { SocialData } from '../../../../types/patient/socialData';
+import { EmergencyContact } from '../../../../types/patient/emergencyContact';
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
@@ -15,48 +15,6 @@ interface Input {
   social_data?: SocialData;
   emergency_contact?: EmergencyContact;
 }
-
-// interface Patient {
-//   id?: number;
-//   mr_number?: string;
-//   ktp_number?: string;
-//   first_name?: string;
-//   last_name?: string;
-//   active_status?: boolean;
-//   mother_name?: string;
-//   employee_id: number ;
-// }
-
-// interface PersonalInformation {
-//   birth_place?: string;
-//   birth_date?: string;
-//   gender?: string;
-//   blood_type?: string;
-//   maritial_status?: string;
-//   religion?: string;
-//   contact_number?: string;
-//   email?: string;
-//   id_type?: string;
-//   id_number: string;
-//   employeer?: string;
-//   education?: string;
-// }
-
-// interface SocialData {
-//   address?: string;
-//   city?: string;
-//   postal_code?: string;
-//   mr_date: string;
-//   weight?: number;
-//   ethnicity?: string;
-// }
-
-// interface EmergencyContact {
-//   contact_name?: string;
-//   phone_number?: string;
-//   address?: string;
-//   city?: string;
-// }
 
 const PatientForm: React.FC = () => {
   const router = useRouter();

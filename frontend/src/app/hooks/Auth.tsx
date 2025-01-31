@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { validateToken } from '../../../utils/token';
+import { authMiddleware } from '../../middlewares/authMiddleware';
 
 const useAuth = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -13,7 +13,7 @@ const useAuth = () => {
             if (!token) {
                 router.push('/login');
             } else {
-                const isValidToken = validateToken(token);
+                const isValidToken = authMiddleware(token);
                 if (!isValidToken) {
                     localStorage.removeItem('Authorization');
                     router.push('/login');

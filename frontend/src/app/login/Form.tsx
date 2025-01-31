@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { LoginService } from '@/services/loginService';
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
@@ -11,28 +12,23 @@ const LoginFormComponent: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post(apiURL + '/auth/login', { email, password });
+      const response = await LoginService.login(email, password);
 
-      if (response.data && response.data.token) {
-        const token = response.data.token;
-
-        // Store token in local storage (less secure)
-        localStorage.setItem('Authorization', token);
+      if (response?.token) {
+        localStorage.setItem('Authorization', response.token);
 
         // Redirect to outpatient registration page
         window.location.href = '/outpatient/form';
-      } else if (response.data && response.data.message) {
-        alert(response.data.message);
-        setEmail('');
-        setPassword('');
+      } else {
+        console.error('Error logging in:', response);
+        throw new Error("Invalid credentials or missing token.");
       }
     } catch (error) {
       console.error('Login error:', error);
-      if (axios.isAxiosError(error) && error.response) {
-        alert(`Error: ${error.response.data.message}`);
-      } else {
-        alert('An unexpected error occurred');
-      }
+      setEmail('');
+      setPassword('');
+
+      alert(error || "Login failed. Please try again.");
     }
   };
 

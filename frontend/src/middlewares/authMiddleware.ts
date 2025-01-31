@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 // Function to check token expiration
-export function validateToken(token: string): boolean {
+export function authMiddleware(token: string): boolean {
     try {
         if (!token) {
             console.log('Token not provided');

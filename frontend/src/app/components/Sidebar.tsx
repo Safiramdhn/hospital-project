@@ -1,15 +1,11 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import { Employee } from '../../../types/employee';
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
-interface Employee {
-  id: number;
-  name: string;
-  email: string;
-}
-
 import NavItemComponent from './NavItem';
+import { EmployeeService } from '@/services/employeeService';
 
 const SideBarComponent: React.FC = () => {
   const [employee, setEmployee] = useState<Employee | null>(null);
@@ -20,22 +16,13 @@ const SideBarComponent: React.FC = () => {
   useEffect(() => {
     const getEmployeeProfile = async () => {
       try {
-        const response = await fetch(`${apiURL}/employee/profile`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('Authorization')}`,
-          },
-        });
-        
-        const data = await response.json();
-        if (Array.isArray(data)) {
-          setEmployee(data[0] || null); // Handle array response
-        } else {
-          setEmployee(data);
-        }
+        const response = await EmployeeService.getProfile();
+          setEmployee(response);
         
         setError(null);
       } catch (error) {
         setError('Failed to fetch employee profile');
+        alert(error);
       } finally {
         setLoading(false);
       }

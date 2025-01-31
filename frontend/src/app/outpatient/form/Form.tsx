@@ -1,10 +1,10 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { OutPatientRegistration } from '@/app/types/outpatient';
-import { Clinic } from '@/app/types/clinic';
-import { Doctor } from '@/app/types/doctor';
-import { TariffReference } from '@/app/types/tariffReference';
-import { Patient } from '@/app/types/patient/patient';
+import { OutPatientRegistration } from '../../../../types/outpatient';
+import { Clinic } from '../../../../types/clinic'; 
+import { Doctor } from '../../../../types/doctor';
+import { TariffReference } from '../../../../types/tariffReference';
+import { Patient } from '../../../../types/patient/patient';
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
