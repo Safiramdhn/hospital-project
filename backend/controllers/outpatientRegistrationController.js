@@ -73,10 +73,10 @@ const getAllOutPatientRegistration = async (req, res) => {
     filter['$service_detail.clinic.name$'] = { [Op.like]: `%${clinic_name}%` };
   }
   if (registration_number) {
-    filter.registration_number = parseInt(registration_number);
+    filter['$registration_number$'] = { [Op.like]: `%${registration_number}%` };
   }
   if (booking_number) {
-    filter.booking_number = parseInt(booking_number);
+    filter['$booking_number$'] = { [Op.like]: `%${booking_number}%` };
   }
 
   try {
