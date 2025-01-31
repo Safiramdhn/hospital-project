@@ -14,7 +14,7 @@ interface Input {
 export const PatientService = {
     getByCredential: async (patient_credential: string): Promise<any> => {
         try {
-            const response = await apiClient.getPatientByCredential(patient_credential);
+            const response = await apiClient.getPatientByCredential({ patient_credential });
 
             return response?.data;
         } catch (error) {

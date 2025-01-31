@@ -1,14 +1,11 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import axios from 'axios';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 
 import { Patient } from '@/types/patient/patient';
 import { PatientService } from '@/services/patientService';
 
 const PatientDetailComponent = ({ patientID }: { patientID: number | undefined }) => {
-  const router = useRouter();
   const [patient, setPatient] = useState<Patient | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -22,20 +19,26 @@ const PatientDetailComponent = ({ patientID }: { patientID: number | undefined }
 
   // fetch patient detail from api
   useEffect(() => {
+    if (patientID) {
     const fetchPatientDetail = async () => {
       setLoading(true);
       try {
         const result = await PatientService.getById(patientID);
         setPatient(result);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('An unexpected error occurred');
+        }
       } finally {
         setLoading(false);
       }
     };
-
-    fetchPatientDetail();
-  },[patientID]);
+  
+      fetchPatientDetail();
+    }
+  }, [patientID]);
 
   return (
     <div className="p-6 bg-white shadow-lg rounded-lg w-full max-w-6xl mx-auto mt-14 mb-16">
