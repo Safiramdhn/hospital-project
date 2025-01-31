@@ -1,10 +1,14 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { OutPatientRegistration } from '../../../../types/outpatient';
-import { Clinic } from '../../../../types/clinic'; 
-import { Doctor } from '../../../../types/doctor';
-import { TariffReference } from '../../../../types/tariffReference';
-import { Patient } from '../../../../types/patient/patient';
+import { OutPatientRegistration } from '@/types/outpatient';
+import { Clinic } from '@/types/clinic'; 
+import { Doctor } from '@/types/doctor';
+import { TariffReference } from '@/types/tariffReference';
+import { Patient } from '@/types/patient/patient';
+import { ClinicService } from '@/services/clinicService';
+import { DoctorService } from '@/services/doctorService';
+import { TariffReferenceService } from '@/services/tarffReferenceService';
+import { OutpatientService } from '@/services/outpatientService';
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
@@ -40,7 +44,7 @@ const OutpatientRegistrationForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
-  const [clinics, setClinic] = useState<Clinic[] | null>(null);
+  const [clinics, setClinic] = useState<Clinic[]>([]);
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [tariffs, setTariffs] = useState<TariffReference[]>([]);
 
@@ -60,7 +64,7 @@ const OutpatientRegistrationForm: React.FC = () => {
 
   const handlePatientSearch = async () => {
     try {
-      const response = await fetch(`${apiURL}/patient/find-patient-record`, {
+      const result = await fetch(`${apiURL}/patient/find-patient-record`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -69,64 +73,45 @@ const OutpatientRegistrationForm: React.FC = () => {
         body: JSON.stringify({ patient_credential: patientCredential }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
+      if (!result.ok) {
+        const errorData = await result.json();
         throw new Error(errorData.message || 'Failed to fetch patient data.');
       }
 
-      const data = await response.json();
+      const data = await result.json();
       setPatientData(data.patient);
     } catch (error) {
       console.error('Error searching patient:', error);
     }
   };
 
-  useEffect(() => {
-    console.log(patientData); // Check if patientData is being updated properly
-  }, [patientData]); // Runs when patientData changes
-
   // Fetch clinics, doctors and tariffs
   useEffect(() => {
     const fetchClinics = async () => {
       try {
-        const response = await fetch(`${apiURL}/clinic`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('Authorization')}`,
-          },
-        });
-        const data = await response.json();
-        console.log('clinic response', data);
-        setClinic(data);
+        const result = await ClinicService.getClinics();
+        setClinic(result);
       } catch (error) {
         console.error('Error fetching clinics:', error);
+        alert(error);
       }
     };
     const fetchDoctors = async () => {
       try {
-        const response = await fetch(`${apiURL}/doctor`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('Authorization')}`,
-          },
-        });
-        const data = await response.json();
-        console.log('doctor response', data);
-        setDoctors(data);
+        const result = await DoctorService.getDoctors();
+        setDoctors(result);
       } catch (error) {
         console.error('Error fetching doctors:', error);
+        alert(error);
       }
     };
     const fetchTariffs = async () => {
       try {
-        const response = await fetch(`${apiURL}/tariff-reference`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('Authorization')}`,
-          },
-        });
-        const data = await response.json();
-        console.log('tariff response', data);
-        setTariffs(data);
+        const result = await TariffReferenceService.getTariffReferences();
+        setTariffs(result);
       } catch (error) {
         console.error('Error fetching tariffs:', error);
+        alert(error);
       }
     };
 
@@ -157,29 +142,13 @@ const OutpatientRegistrationForm: React.FC = () => {
     setLoading(true);
     setMessage('');
 
-    console.log('data submitted', formData);
     if (formData.register.patient_id <= 0 && patientData) {
       formData.register.patient_id = patientData.id
     }
 
     try {
-      const response = await fetch(`${apiURL}/outpatient-register`, {
-        // update the api url
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('Authorization')}`,
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to register outpatient.');
-      }
-
-      const data = await response.json();
-      setMessage(`${data.message}, queue number: ${data.queue_number}`);
+      const result = await OutpatientService.create(formData);
+      setMessage(`${result?.message}, queue number: ${result?.queue_number}`);
 
       // unset the form fields
       setFormData({register: {

@@ -2,10 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import { Patient } from '../../../../types/patient/patient';
-import { PersonalInformation } from '../../../../types/patient/personalInformation';
-import { SocialData } from '../../../../types/patient/socialData';
-import { EmergencyContact } from '../../../../types/patient/emergencyContact';
+import { Patient } from '@/types/patient/patient';
+import { PersonalInformation } from '@/types/patient/personalInformation';
+import { SocialData } from '@/types/patient/socialData';
+import { EmergencyContact } from '@/types/patient/emergencyContact';
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 

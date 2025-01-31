@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Tooltip } from 'react-tooltip';
 
-import { Patient } from '../../../types/patient/patient'; 
+import { Patient } from '@/types/patient/patient'; 
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 

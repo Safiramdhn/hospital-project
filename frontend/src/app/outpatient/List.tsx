@@ -3,7 +3,7 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 
-import { OutPatientFilter, OutPatient } from '../../../types/outpatient';
+import { OutPatientFilter, OutPatient } from '@/types/outpatient';
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 

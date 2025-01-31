@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 
-import { Patient } from '../../../../../types/patient/patient';
+import { Patient } from '@/types/patient/patient';
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 

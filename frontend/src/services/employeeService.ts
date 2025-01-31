@@ -1,5 +1,5 @@
 import apiClient from "@/utils/apiClient";
-import { Employee } from "../../types/employee";
+import { Employee } from "../types/employee";
 
 export const EmployeeService = {
     getProfile: async function (): Promise<Employee | null> {

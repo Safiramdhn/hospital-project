@@ -76,6 +76,31 @@ class ApiClient {
     async getEmployeeProfile<T>(): Promise<AxiosResponse<T>> {
         return this.instance.get<T>("/employee/profile");
     }
+
+    // get clinic request
+    async getClinics<T>(): Promise<AxiosResponse<T>> {
+        return this.instance.get<T>("/clinic");
+    }
+
+    // get doctor request
+    async getDoctors<T>(): Promise<AxiosResponse<T>> {
+        return this.instance.get<T>("/doctor");
+    }
+
+    // get tariff reference request
+    async getTariffReferences<T>(): Promise<AxiosResponse<T>> {
+        return this.instance.get<T>("/tariff-reference");
+    }
+
+    // create outpatient registration request
+    async createOutpatientRegistration<T>(data: any): Promise<AxiosResponse<T>> {
+        return this.instance.post<T>("/outpatient-register", data);
+    }
+
+    // get all outpatient registration request
+    async getOutpatientRegistrations(params: Record<string, string>): Promise<AxiosResponse<any>> {
+        return this.instance.get("/outpatient-register", { params });
+    }
 }
 
 const apiClient = new ApiClient();
