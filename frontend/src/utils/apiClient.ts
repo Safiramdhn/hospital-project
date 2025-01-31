@@ -101,6 +101,36 @@ class ApiClient {
     async getOutpatientRegistrations(params: Record<string, string>): Promise<AxiosResponse<any>> {
         return this.instance.get("/outpatient-register", { params });
     }
+
+    // get patient by credential request
+    async getPatientByCredential<T>(data: any): Promise<AxiosResponse<T>> {
+        return this.instance.post<T>("/patient/find-patient-record", data);
+    }
+
+    // get patient with id request
+    async getPatientById<T>(id: number): Promise<AxiosResponse<T>> {
+        return this.instance.get<T>(`/patient/${id}`);
+    }
+
+    // update patient request
+    async updatePatient<T>(id: number, data: any): Promise<AxiosResponse<T>>{
+        return this.instance.put<T>(`/patient/${id}`, data);
+    }
+
+    // create patient request
+    async createPatient<T>(data: any): Promise<AxiosResponse<T>> {
+        return this.instance.post<T>("/patient", data);
+    }
+
+    // delete patient request
+    async deletePatient(id: number): Promise<AxiosResponse<void>> {
+        return this.instance.delete(`/patient/${id}`);
+    }
+
+    // get all patient request
+    async getAllPatients<T>(): Promise<AxiosResponse<T>> {
+        return this.instance.get<T>("/patient");
+    }
 }
 
 const apiClient = new ApiClient();

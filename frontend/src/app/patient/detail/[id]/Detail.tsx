@@ -5,8 +5,7 @@ import axios from 'axios';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 
 import { Patient } from '@/types/patient/patient';
-
-const apiURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+import { PatientService } from '@/services/patientService';
 
 const PatientDetailComponent = ({ patientID }: { patientID: number | undefined }) => {
   const router = useRouter();
@@ -26,17 +25,8 @@ const PatientDetailComponent = ({ patientID }: { patientID: number | undefined }
     const fetchPatientDetail = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${apiURL}/patient/${patientID}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('Authorization')}`,
-            'Content-Type': 'application/json',
-          },
-        });
-        if (response.status !== 200) {
-          throw new Error('Failed to fetch patient data');
-        }
-        const data = response.data;
-        setPatient(data);
+        const result = await PatientService.getById(patientID);
+        setPatient(result);
       } catch (err: any) {
         setError(err.message);
       } finally {

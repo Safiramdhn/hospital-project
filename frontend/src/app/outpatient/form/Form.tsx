@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { OutPatientRegistration } from '@/types/outpatient';
-import { Clinic } from '@/types/clinic'; 
+import { Clinic } from '@/types/clinic';
 import { Doctor } from '@/types/doctor';
 import { TariffReference } from '@/types/tariffReference';
 import { Patient } from '@/types/patient/patient';
@@ -9,8 +9,7 @@ import { ClinicService } from '@/services/clinicService';
 import { DoctorService } from '@/services/doctorService';
 import { TariffReferenceService } from '@/services/tarffReferenceService';
 import { OutpatientService } from '@/services/outpatientService';
-
-const apiURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+import { PatientService } from '@/services/patientService';
 
 const OutpatientRegistrationForm: React.FC = () => {
   const [formData, setFormData] = useState<OutPatientRegistration>({
@@ -37,7 +36,7 @@ const OutpatientRegistrationForm: React.FC = () => {
       tariff_code: '',
     },
   });
-  
+
   const [patientCredential, setPatientCredential] = useState('');
   const [patientData, setPatientData] = useState<Patient | null>(null);
 
@@ -64,24 +63,15 @@ const OutpatientRegistrationForm: React.FC = () => {
 
   const handlePatientSearch = async () => {
     try {
-      const result = await fetch(`${apiURL}/patient/find-patient-record`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('Authorization')}`,
-        },
-        body: JSON.stringify({ patient_credential: patientCredential }),
-      });
-
-      if (!result.ok) {
-        const errorData = await result.json();
-        throw new Error(errorData.message || 'Failed to fetch patient data.');
-      }
-
-      const data = await result.json();
-      setPatientData(data.patient);
-    } catch (error) {
+      const result = await PatientService.getByCredential(patientCredential);
+      setPatientData(result.patient);
+    } catch (error: any) {
       console.error('Error searching patient:', error);
+
+      // Check if error has a message property, otherwise use a default message
+      const errorMessage = error?.message || 'Error searching patient';
+
+      setMessage(errorMessage);
     }
   };
 
@@ -91,27 +81,32 @@ const OutpatientRegistrationForm: React.FC = () => {
       try {
         const result = await ClinicService.getClinics();
         setClinic(result);
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error fetching clinics:', error);
-        alert(error);
+        const errorMessage = error?.message || 'Error fetching clinic';
+
+        setMessage(errorMessage);
       }
     };
     const fetchDoctors = async () => {
       try {
         const result = await DoctorService.getDoctors();
         setDoctors(result);
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error fetching doctors:', error);
-        alert(error);
+        
+        const errorMessage = error?.message || 'Error fetching doctor';
+        setMessage(errorMessage);
       }
     };
     const fetchTariffs = async () => {
       try {
         const result = await TariffReferenceService.getTariffReferences();
         setTariffs(result);
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error fetching tariffs:', error);
-        alert(error);
+        const errorMessage = error?.message || 'Error fetching tariff';
+        setMessage(errorMessage);
       }
     };
 
@@ -124,7 +119,7 @@ const OutpatientRegistrationForm: React.FC = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     const [section, field] = name.split('.');
-  
+
     if (section && field && formData) {
       setFormData((prev) => ({
         ...prev,
@@ -143,7 +138,7 @@ const OutpatientRegistrationForm: React.FC = () => {
     setMessage('');
 
     if (formData.register.patient_id <= 0 && patientData) {
-      formData.register.patient_id = patientData.id
+      formData.register.patient_id = patientData.id;
     }
 
     try {
@@ -151,28 +146,30 @@ const OutpatientRegistrationForm: React.FC = () => {
       setMessage(`${result?.message}, queue number: ${result?.queue_number}`);
 
       // unset the form fields
-      setFormData({register: {
-        patient_id: 0,
-        session: 'Fullday',
-        notes: '',
-        visit_date: '',
-      },
-      service_detail: {
-        clinic_code: '',
-        doctor_code: '',
-      },
-      billing_detail: {
-        treatment: '',
-        discount: 0,
-      },
-      visit_detail: {
-        class_type: 'NON',
-        insurance_type: 'UMUM',
-        insurance_number: '',
-        guarantor: '',
-        entry_method: 'Datang Sendiri',
-        tariff_code: '',
-      },});
+      setFormData({
+        register: {
+          patient_id: 0,
+          session: 'Fullday',
+          notes: '',
+          visit_date: '',
+        },
+        service_detail: {
+          clinic_code: '',
+          doctor_code: '',
+        },
+        billing_detail: {
+          treatment: '',
+          discount: 0,
+        },
+        visit_detail: {
+          class_type: 'NON',
+          insurance_type: 'UMUM',
+          insurance_number: '',
+          guarantor: '',
+          entry_method: 'Datang Sendiri',
+          tariff_code: '',
+        },
+      });
     } catch (error) {
       setMessage('Error submitting form. Please try again.');
       console.error(error);
@@ -195,7 +192,11 @@ const OutpatientRegistrationForm: React.FC = () => {
           placeholder="No. KTP / No. Rekam Medis"
         />
       </div>
-      <button type="button" onClick={handlePatientSearch} className="w-full bg-moonstone-100 text-davysGray-800 py-2 rounded hover:bg-mint-300 transition my-4">
+      <button
+        type="button"
+        onClick={handlePatientSearch}
+        className="w-full bg-moonstone-100 text-davysGray-800 py-2 rounded hover:bg-mint-300 transition my-4"
+      >
         Cari Pasien
       </button>
 
@@ -237,7 +238,12 @@ const OutpatientRegistrationForm: React.FC = () => {
         </div>
         <div>
           <label className="block text-sm font-medium">Catatan</label>
-          <textarea name="register.notes" value={formData.register.notes} onChange={handleChange} className="w-full p-2 border roundedshadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none" />
+          <textarea
+            name="register.notes"
+            value={formData.register.notes}
+            onChange={handleChange}
+            className="w-full p-2 border roundedshadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none"
+          />
         </div>
         <div>
           <label className="block text-sm font-medium">Tanggal Rawat Jalan</label>
@@ -460,7 +466,11 @@ const OutpatientRegistrationForm: React.FC = () => {
 
         <div className="p-2 border-t-4 rounded border-gray-100"></div>
         {/* Submit Button */}
-        <button type="submit" className="w-full bg-moonstone-100 text-davysGray-800 py-2 rounded hover:bg-mint-300 transition my-4" disabled={loading}>
+        <button
+          type="submit"
+          className="w-full bg-moonstone-100 text-davysGray-800 py-2 rounded hover:bg-mint-300 transition my-4"
+          disabled={loading}
+        >
           {loading ? 'Submitting...' : 'Registrasi'}
         </button>
       </form>

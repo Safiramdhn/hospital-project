@@ -4,8 +4,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 
 import { OutPatientFilter, OutPatient } from '@/types/outpatient';
-
-const apiURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+import { OutpatientService } from '@/services/outpatientService';
 
 const OutpatientList: React.FC = () => {
   const [data, setData] = useState<OutPatient[]>([]);
@@ -17,56 +16,24 @@ const OutpatientList: React.FC = () => {
     doctorName: '',
     clinicName: '',
   });
-  
+
   useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const params = new URLSearchParams({
-            patient_name: search.patientName,
-            doctor_name: search.doctorName,
-            clinic_name: search.clinicName,
-            registration_number: search.registrationNumber,
-            booking_number: search.bookingNumber,
-          }).toString();
-    
-          const response = await axios.get(`${apiURL}/outpatient-register?${params}`, {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: 'Bearer ' + localStorage.getItem('Authorization'),
-            },
-          });
-    
-          // Check if the response is a JSON
-          if (response.status !== 200) {
-            throw new Error('Failed to fetch data');
-          }
-    
-          // Assuming response.data is an array, map it to match the OutPatients interface
-          const formattedData = response.data.map((item: any) => ({
-            patient: {
-              first_name: item.patient.first_name,
-              last_name: item.patient.last_name,
-              mr_number: item.patient.mr_number,
-            },
-            doctor: {
-              name: item.service_detail?.doctor?.name ?? '',
-            },
-            clinic: {
-              name: item.service_detail?.clinic?.name ?? '',
-            },
-            registration_number: item.registration_number,
-            booking_number: item.booking_number,
-            visit_date: item.visit_date,
-          }));
-    
-          console.log("Formatted Data", formattedData);
-          setData(formattedData);  // Update state with the formatted data
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        } finally {
-          setLoading(false);
-        }
-      };
+    const fetchData = async () => {
+      try {
+        const result = await OutpatientService.getAll({
+          patient_name: search.patientName,
+          doctor_name: search.doctorName,
+          clinic_name: search.clinicName,
+          registration_number: search.registrationNumber,
+          booking_number: search.bookingNumber,
+        });
+        setData(result); // Update state with the formatted data
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchData();
   }, [search]);
 
@@ -135,7 +102,7 @@ const OutpatientList: React.FC = () => {
             <tbody>
               {data.length > 0 ? (
                 data.map((item) => (
-                  <tr className="hover:bg-gray-50">
+                  <tr key={item.id} className="hover:bg-gray-50">
                     <td className="border p-2">{item.registration_number}</td>
                     <td className="border p-2">{item.booking_number}</td>
                     <td className="border p-2">

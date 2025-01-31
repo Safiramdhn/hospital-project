@@ -21,6 +21,7 @@ export interface OutPatient {
     registration_number: string;
     booking_number: string;
     visit_date: string;
+    id: number;
 }
 
 export interface OutPatientRegistration {

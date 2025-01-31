@@ -8,8 +8,7 @@ import { faEye, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons
 import { Tooltip } from 'react-tooltip';
 
 import { Patient } from '@/types/patient/patient'; 
-
-const apiURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+import { PatientService } from '@/services/patientService';
 
 const PatientListComponent: React.FC = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
@@ -22,13 +21,8 @@ const PatientListComponent: React.FC = () => {
     const fetchPatients = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${apiURL}/patient`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('Authorization')}`,
-            'Content-Type': 'application/json',
-          },
-        });
-        setPatients(response.data);
+        const result = await PatientService.getAll();
+        setPatients(result);
       } catch (err: any) {
         setError('Failed to fetch patient data');
       } finally {
@@ -46,12 +40,7 @@ const PatientListComponent: React.FC = () => {
   const handleDelete = async (id: number) => {
     if (window.confirm('Are you sure you want to delete this patient?')) {
       try {
-        await axios.delete(`${apiURL}/patient/${id}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('Authorization')}`,
-            'Content-Type': 'application/json',
-          },
-        });
+        await PatientService.delete(id);
         setPatients(patients.filter((patient) => patient.id !== id));
       } catch (err: any) {
         setError('Failed to delete patient');

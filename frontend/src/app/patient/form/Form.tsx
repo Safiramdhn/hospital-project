@@ -6,8 +6,7 @@ import { Patient } from '@/types/patient/patient';
 import { PersonalInformation } from '@/types/patient/personalInformation';
 import { SocialData } from '@/types/patient/socialData';
 import { EmergencyContact } from '@/types/patient/emergencyContact';
-
-const apiURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+import { PatientService } from '@/services/patientService';
 
 interface Input {
   patient?: Patient;
@@ -89,21 +88,14 @@ const PatientForm: React.FC = () => {
       if (parsedID) {
         setLoading(true);
         try {
-          const response = await fetch(`${apiURL}/patient/${parsedID}`, {
-            headers:{
-              contentType: 'application/json',
-              Authorization: `Bearer ${localStorage.getItem('Authorization')}`,
-            }
-          });
-          if (!response.ok) throw new Error('Failed to fetch patient data');
-          const data = await response.json();
+          const result = await PatientService.getById(parsedID);
           setInput({
-            ...data,
+            ...result,
             patient: {
-              first_name: data.first_name,
-              last_name: data.last_name,
-              ktp_number: data.ktp_number,
-              mother_name: data.mother_name,
+              first_name: result.first_name,
+              last_name: result.last_name,
+              ktp_number: result.ktp_number,
+              mother_name: result.mother_name,
             }
           });
         } catch (err: any) {
@@ -129,19 +121,7 @@ const PatientForm: React.FC = () => {
     setError(null);
 
     try {
-      const method = parsedID ? 'PUT' : 'POST';
-      const url = parsedID ? `${apiURL}/patient/${parsedID}` : `${apiURL}/patient`;
-      console.log("patient for submit", input)
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('Authorization')}`,
-        },
-        body: JSON.stringify(input),
-      });
-
-      if (!response.ok) throw new Error('Failed to save patient data');
+      const result = parsedID ? await PatientService.update(parsedID, input) : await PatientService.create(input);
       router.push('/patient');
     } catch (err: any) {
       setError(err.message);
