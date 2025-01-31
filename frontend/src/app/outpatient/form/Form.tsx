@@ -47,30 +47,21 @@ const OutpatientRegistrationForm: React.FC = () => {
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [tariffs, setTariffs] = useState<TariffReference[]>([]);
 
-  const [date, setDate] = useState('');
-
-  // Set initial date to today's date in YYYY-MM-DD format
-  useEffect(() => {
-    const today = new Date();
-    const formattedDate = today.toISOString().split('T')[0]; // "YYYY-MM-DD"
-    setDate(formattedDate);
-  }, []);
-
-  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDate(event.target.value);
-    handleChange(event);
-  };
-
   const handlePatientSearch = async () => {
     try {
       const result = await PatientService.getByCredential(patientCredential);
       setPatientData(result.patient);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error searching patient:', error);
-
-      // Check if error has a message property, otherwise use a default message
-      const errorMessage = error?.message || 'Error searching patient';
-
+  
+      // Type narrowing to safely access error.message
+      let errorMessage = 'Error searching patient'; // Default message
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (typeof error === 'string') {
+        errorMessage = error;
+      }
+  
       setMessage(errorMessage);
     }
   };
@@ -81,10 +72,16 @@ const OutpatientRegistrationForm: React.FC = () => {
       try {
         const result = await ClinicService.getClinics();
         setClinic(result);
-      } catch (error: any) {
-        console.error('Error fetching clinics:', error);
-        const errorMessage = error?.message || 'Error fetching clinic';
-
+      } catch (error: unknown) {
+        console.error('Error searching clinics:', error);
+    
+        // Type narrowing to safely access error.message
+        let errorMessage = 'Error searching clinics'; // Default message
+        if (error instanceof Error) {
+          errorMessage = error.message;
+        } else if (typeof error === 'string') {
+          errorMessage = error;
+        }
         setMessage(errorMessage);
       }
     };
@@ -92,10 +89,16 @@ const OutpatientRegistrationForm: React.FC = () => {
       try {
         const result = await DoctorService.getDoctors();
         setDoctors(result);
-      } catch (error: any) {
-        console.error('Error fetching doctors:', error);
-        
-        const errorMessage = error?.message || 'Error fetching doctor';
+      } catch (error: unknown) {
+        console.error('Error searching doctors:', error);
+    
+        // Type narrowing to safely access error.message
+        let errorMessage = 'Error searching doctors'; // Default message
+        if (error instanceof Error) {
+          errorMessage = error.message;
+        } else if (typeof error === 'string') {
+          errorMessage = error;
+        }
         setMessage(errorMessage);
       }
     };
@@ -103,9 +106,16 @@ const OutpatientRegistrationForm: React.FC = () => {
       try {
         const result = await TariffReferenceService.getTariffReferences();
         setTariffs(result);
-      } catch (error: any) {
-        console.error('Error fetching tariffs:', error);
-        const errorMessage = error?.message || 'Error fetching tariff';
+      } catch (error: unknown) {
+        console.error('Error searching tariffs:', error);
+    
+        // Type narrowing to safely access error.message
+        let errorMessage = 'Error searching tariffs'; // Default message
+        if (error instanceof Error) {
+          errorMessage = error.message;
+        } else if (typeof error === 'string') {
+          errorMessage = error;
+        }
         setMessage(errorMessage);
       }
     };
@@ -121,13 +131,18 @@ const OutpatientRegistrationForm: React.FC = () => {
     const [section, field] = name.split('.');
 
     if (section && field && formData) {
-      setFormData((prev) => ({
-        ...prev,
-        [section]: {
-          ...prev[section as keyof FormData],
-          [field]: value,
-        },
-      }));
+      // Check if section is a valid key of OutPatientRegistration
+      if (section in formData) {
+        setFormData((prev) => ({
+          ...prev,
+          [section]: {
+            ...prev[section as keyof OutPatientRegistration],
+            [field]: value,
+          },
+        }));
+      } else {
+        console.error(`Invalid section: ${section}`);
+      }
     }
   };
 
@@ -251,9 +266,10 @@ const OutpatientRegistrationForm: React.FC = () => {
             type="date"
             name="register.visit_date"
             value={formData.register.visit_date}
-            onChange={handleDateChange}
+            onChange={handleChange}
             className="border p-2 w-full rounded-md shadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none"
             required
+            onKeyDown={(e) => e.preventDefault()}
           />
         </div>
 
@@ -410,9 +426,8 @@ const OutpatientRegistrationForm: React.FC = () => {
             <p>
               Tarif Registrasi:{' '}
               {tariffs.find((tariff) => tariff.tariff_code === formData.visit_detail.tariff_code)
-                ? //ignore invalid
-                  parseFloat(tariffs.find((tariff) => tariff.tariff_code === formData.visit_detail.tariff_code)!.base_registration_fee).toFixed(2)
-                : '0.00'}
+                ? tariffs.find((tariff) => tariff.tariff_code === formData.visit_detail.tariff_code)!.base_registration_fee // Returns a number
+                : 0.0}
             </p>
 
             {/* examination fee */}
@@ -420,46 +435,61 @@ const OutpatientRegistrationForm: React.FC = () => {
               Tarif Pemeriksaan:{' '}
               {tariffs.find((tariff) => tariff.tariff_code === formData.visit_detail.tariff_code)
                 ? //ignore invalid
-                  parseFloat(tariffs.find((tariff) => tariff.tariff_code === formData.visit_detail.tariff_code)!.base_examination_fee).toFixed(2)
+                  tariffs.find((tariff) => tariff.tariff_code === formData.visit_detail.tariff_code)!.base_examination_fee
                 : '0.00'}
             </p>
 
-            {/* total fee */}
+            {/* Total Fee */}
             <p>
               Tarif Total:{' '}
-              {tariffs.find((tariff) => tariff.tariff_code === formData.visit_detail.tariff_code)
-                ? //ignore invalid
-                  (
-                    parseFloat(tariffs.find((tariff) => tariff.tariff_code === formData.visit_detail.tariff_code)!.base_registration_fee) +
-                    parseFloat(tariffs.find((tariff) => tariff.tariff_code === formData.visit_detail.tariff_code)!.base_examination_fee)
-                  ).toFixed(2)
-                : '0.00'}
+              {(() => {
+                const selectedTariff = tariffs.find((tariff) => tariff.tariff_code === formData.visit_detail.tariff_code);
+
+                if (selectedTariff) {
+                  const baseRegistrationFee = selectedTariff.base_registration_fee;
+                  const baseExaminationFee = selectedTariff.base_examination_fee;
+                  const totalFee = parseFloat(baseRegistrationFee) + parseFloat(baseExaminationFee);
+                  return totalFee;
+                } else {
+                  return '0.00';
+                }
+              })()}
             </p>
 
-            {/* total discount fee */}
+            {/* Total Discount Fee */}
             <p>
               Diskon:{' '}
-              {tariffs.find((tariff) => tariff.tariff_code === formData.visit_detail.tariff_code)
-                ? //ignore invalid
-                  (
-                    ((parseFloat(tariffs.find((tariff) => tariff.tariff_code === formData.visit_detail.tariff_code)!.base_registration_fee) +
-                      parseFloat(tariffs.find((tariff) => tariff.tariff_code === formData.visit_detail.tariff_code)!.base_examination_fee)) *
-                      (parseFloat(formData.billing_detail.discount) || 0)) /
-                    100
-                  ).toFixed(2)
-                : '0.00'}
+              {(() => {
+                const selectedTariff = tariffs.find((tariff) => tariff.tariff_code === formData.visit_detail.tariff_code);
+
+                if (selectedTariff) {
+                  const baseRegistrationFee = selectedTariff.base_registration_fee;
+                  const baseExaminationFee = selectedTariff.base_examination_fee;
+                  const discountPercentage = formData.billing_detail.discount || 0;
+                  const totalDiscount = ((parseFloat(baseRegistrationFee) + parseFloat(baseExaminationFee)) * discountPercentage) / 100;
+                  return totalDiscount; // Convert to string for display
+                } else {
+                  return '0.00';
+                }
+              })()}
             </p>
 
-            {/* total payment */}
+            {/* Total Payment */}
             <p>
               Total Pembayaran:{' '}
-              {tariffs.find((tariff) => tariff.tariff_code === formData.visit_detail.tariff_code)
-                ? (
-                    (parseFloat(tariffs.find((tariff) => tariff.tariff_code === formData.visit_detail.tariff_code)!.base_registration_fee) +
-                      parseFloat(tariffs.find((tariff) => tariff.tariff_code === formData.visit_detail.tariff_code)!.base_examination_fee)) *
-                    (1 - (parseFloat(formData.billing_detail.discount) || 0) / 100)
-                  ).toFixed(2)
-                : '0.00'}
+              {(() => {
+                const selectedTariff = tariffs.find((tariff) => tariff.tariff_code === formData.visit_detail.tariff_code);
+
+                if (selectedTariff) {
+                  const baseRegistrationFee = selectedTariff.base_registration_fee;
+                  const baseExaminationFee = selectedTariff.base_examination_fee;
+                  const discountPercentage = formData.billing_detail.discount || 0;
+                  const totalPayment = ((parseFloat(baseRegistrationFee) + parseFloat(baseExaminationFee)) * discountPercentage) / 100;
+                  return totalPayment; // Convert to string for display
+                } else {
+                  return '0.00';
+                }
+              })()}
             </p>
           </div>
         )}

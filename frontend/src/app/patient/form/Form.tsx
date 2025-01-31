@@ -34,11 +34,11 @@ const PatientForm: React.FC = () => {
       createdAt: '',
       updatedAt: '',
       employee: {
-        name: ''
+        name: '',
       },
       personal_information: undefined,
       social_data: undefined,
-      emergency_contact: undefined
+      emergency_contact: undefined,
     },
     personal_information: {
       id_number: '',
@@ -54,7 +54,7 @@ const PatientForm: React.FC = () => {
       birth_date: '',
       contact_number: '',
       email: '',
-      employeer: ''
+      employeer: '',
     },
     social_data: {
       mr_date: '',
@@ -64,9 +64,9 @@ const PatientForm: React.FC = () => {
       city: '',
       postal_code: '',
       weight: 0,
-      ethnicity: '',
+      ethnicity: 'JAWA',
       createdAt: '',
-      updatedAt: ''
+      updatedAt: '',
     },
     emergency_contact: {
       id: 0,
@@ -76,7 +76,7 @@ const PatientForm: React.FC = () => {
       address: '',
       city: '',
       createdAt: '',
-      updatedAt: ''
+      updatedAt: '',
     },
   });
 
@@ -96,10 +96,16 @@ const PatientForm: React.FC = () => {
               last_name: result.last_name,
               ktp_number: result.ktp_number,
               mother_name: result.mother_name,
-            }
+            },
           });
-        } catch (err: any) {
-          setError(err.message);
+        } catch (err: unknown) {
+          let errorMessage = 'Failed to retrieve patient';
+          if (err instanceof Error) {
+            errorMessage += `: ${err.message}`;
+          } else if (typeof err === 'string') {
+            errorMessage += `: ${err}`;
+          }
+          setError(errorMessage);
         } finally {
           setLoading(false);
         }
@@ -111,8 +117,8 @@ const PatientForm: React.FC = () => {
     }
   }, [parsedID]);
 
-  useEffect(() =>{
-    console.log("Patient data", input)
+  useEffect(() => {
+    console.log('Patient data', input);
   }, [input]);
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -122,16 +128,35 @@ const PatientForm: React.FC = () => {
 
     try {
       const result = parsedID ? await PatientService.update(parsedID, input) : await PatientService.create(input);
+      if (result !== undefined) {
+        if (parsedID) {
+          alert('Patient updated successfully');
+        } else {
+          alert('Patient created successfully');
+        }
+      }
       router.push('/patient');
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      let errorMessage = `Failed to ${parsedID ? 'update' : 'create'} patient`;
+      if (err instanceof Error) {
+        errorMessage += `: ${err.message}`;
+      } else if (typeof err === 'string') {
+        errorMessage += `: ${err}`;
+      }
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleChange = (field: keyof Input, value: any) => {
-      setInput((prev) => ({ ...prev, [field]: value }));
+  const handleChange = (field: keyof Input, value: Partial<Input[keyof Input]>) => {
+    setInput((prev) => ({
+      ...prev,
+      [field]: {
+        ...prev[field],
+        ...value,
+      },
+    }));
   };
 
   return (
@@ -152,7 +177,7 @@ const PatientForm: React.FC = () => {
                 type="text"
                 className="border p-2 rounded-md w-full shadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none focus:border-none border-gray-800"
                 value={input.patient?.first_name || ''}
-                onChange={(e) => handleChange('patient', {...input.patient, first_name: e.target.value})}
+                onChange={(e) => handleChange('patient', { ...input.patient, first_name: e.target.value })}
               />
             </div>
 
@@ -174,7 +199,7 @@ const PatientForm: React.FC = () => {
                 className="border p-2 rounded-md w-full shadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none focus:border-none border-gray-800"
                 type="text"
                 value={input.patient?.mother_name || ''}
-                onChange={(e) => handleChange('patient', {...input.patient, mother_name: e.target.value})}
+                onChange={(e) => handleChange('patient', { ...input.patient, mother_name: e.target.value })}
               />
             </div>
 
@@ -245,7 +270,7 @@ const PatientForm: React.FC = () => {
                 type="text"
                 className="border p-2 rounded-md w-full shadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none focus:border-none border-gray-800"
                 value={input.patient?.last_name || ''}
-                onChange={(e) => handleChange('patient', {...input.patient, last_name: e.target.value})}
+                onChange={(e) => handleChange('patient', { ...input.patient, last_name: e.target.value })}
               />
             </div>
 
@@ -255,7 +280,7 @@ const PatientForm: React.FC = () => {
                 className="border p-2 rounded-md w-full shadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none focus:border-none border-gray-800"
                 type="text"
                 value={input.patient?.ktp_number || ''}
-                onChange={(e) => handleChange('patient', {...input.patient, ktp_number: e.target.value})}
+                onChange={(e) => handleChange('patient', { ...input.patient, ktp_number: e.target.value })}
               />
             </div>
 
@@ -279,6 +304,7 @@ const PatientForm: React.FC = () => {
                 type="date"
                 value={input.personal_information?.birth_date || ''}
                 onChange={(e) => handleChange('personal_information', { ...input.personal_information, birth_date: e.target.value })}
+                onKeyDown={(e) => e.preventDefault()}
               />
             </div>
 
@@ -293,6 +319,36 @@ const PatientForm: React.FC = () => {
                 <option value="B">B</option>
                 <option value="O">O</option>
                 <option value="AB">AB</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium">Etnis</label>
+              <select
+                value={input.social_data?.ethnicity || ''}
+                onChange={(e) =>
+                  handleChange('personal_information', {
+                    ...input.social_data,
+                    ethnicity: e.target.value,
+                  })
+                }
+                className="border p-2 rounded-md w-full shadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none focus:border-none border-gray-800"
+              >
+                <option value="JAWA">Jawa</option>
+                <option value="SUNDA">Sunda</option>
+                <option value="BATAK">Batak</option>
+                <option value="BETAWI">Betawi</option>
+                <option value="ACEH">Aceh</option>
+                <option value="MINANGKABAU">Minangkabau</option>
+                <option value="ASMAT">Asmat</option>
+                <option value="DANI">Dani</option>
+                <option value="ARFAK">Arfak</option>
+                <option value="AMBON">Ambon</option>
+                <option value="TERNATE">Ternate</option>
+                <option value="MINAHASA">Minahasa</option>
+                <option value="TORAJA">Toraja</option>
+                <option value="BUGIS">Bugis</option>
+                <option value="LAIN-LAIN">Lain-lain</option>
               </select>
             </div>
 

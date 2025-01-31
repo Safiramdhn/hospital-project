@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
 // Function to check token expiration
 export function authMiddleware(token: string): boolean {
@@ -9,7 +9,7 @@ export function authMiddleware(token: string): boolean {
         }
 
         // Decode the token without verifying the signature
-        const decoded: any = jwt.decode(token);
+        const decoded = jwt.decode(token) as JwtPayload | null;
 
         if (!decoded || !decoded.exp) {
             console.log('Invalid token or no expiration field');

@@ -1,6 +1,4 @@
 'use client';
-
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 
 import { OutPatientFilter, OutPatient } from '@/types/outpatient';

@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosResponse, AxiosError } from "axios";
+import axios, { AxiosInstance, AxiosResponse } from "axios";
 
 class ApiClient {
     private instance: AxiosInstance;

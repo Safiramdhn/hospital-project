@@ -1,9 +1,6 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import { LoginService } from '@/services/loginService';
-
-const apiURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
 const LoginFormComponent: React.FC = () => {
   const [email, setEmail] = useState('');

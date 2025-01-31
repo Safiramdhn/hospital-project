@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -23,7 +22,8 @@ const PatientListComponent: React.FC = () => {
       try {
         const result = await PatientService.getAll();
         setPatients(result);
-      } catch (err: any) {
+      } catch (err) {
+        console.error(err);
         setError('Failed to fetch patient data');
       } finally {
         setLoading(false);
@@ -42,7 +42,8 @@ const PatientListComponent: React.FC = () => {
       try {
         await PatientService.delete(id);
         setPatients(patients.filter((patient) => patient.id !== id));
-      } catch (err: any) {
+      } catch (err) {
+        console.error(err);
         setError('Failed to delete patient');
       }
     }

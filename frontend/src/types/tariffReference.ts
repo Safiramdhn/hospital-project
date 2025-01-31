@@ -3,7 +3,7 @@ export interface TariffReference {
     tariff_code: string;
     category: string;
     description: string;
-    base_registration_fee: number;
-    base_examination_fee: number;
+    base_registration_fee: string;
+    base_examination_fee: string;
     is_active: boolean;
   }
