@@ -1,36 +1,121 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Tentang Aplikasi
 
-## Getting Started
+Aplikasi ini dirancang untuk memfasilitasi proses pendaftaran pasien rawat jalan di fasilitas kesehatan. Aplikasi ini mencakup alur kerja mulai dari login, verifikasi pasien, hingga pendaftaran pasien dan pengambilan nomor antrian. Aplikasi ini dibangun dengan teknologi modern untuk memastikan keandalan dan skalabilitas.
 
-First, run the development server:
+# Flowchart
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+![image.png](attachment:a64ac7ff-470b-444c-871f-91059d45a283:image.png)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# Database Structure
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+![hospital.png](attachment:631ff224-364a-498d-b2a1-c1ddc4ae7e88:hospital.png)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Struktur Project
 
-## Learn More
+- `backend/` : server API menggunakan Node.js
+- `frontend/` : Aplikasi menggunakan React.js
 
-To learn more about Next.js, take a look at the following resources:
+# Fitur
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Form pasien rawat jalan dengan pencarian berdasarkan **nomor KTP** atau **rekam medis**
+- Daftar riwayat pendaftaran pasien rawat jalan dengan filter
+    - Nama pasien
+    - Nama dokter
+    - Nama poliklinik
+    - No. registrasi
+    - No. booking
+- Manajemen pasien (CRUD)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Cara Penggunaan
 
-## Deploy on Vercel
+## Prasyarat
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Backend
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Node.js v.22 or latest
+- MySQL v.8.0.36 or latest
+- Sequelize ORM v.6.37.5
+- Express.js v4.21.2
+
+### Frontend
+
+- React.js v.19
+- Next.js v.15.1.6
+- Tailwind CSS v.3.4.1 or latest
+- Axios v.1.7.9
+
+## Instalasi
+
+- Clone repository
+`git clone https://github.com/Safiramdhn/hospital-project.git`
+
+### Backend
+
+- Instalasi awal project
+    
+    ```bash
+    cd backend
+    npm install
+    ```
+    
+- Inisiasi sequelize
+    
+    ```bash
+    npm install --save-dev sequelize-cli
+    npx sequelize-cli init
+    
+    ```
+    
+- Buat file `.env`  seperti contoh pada file `.env.example`
+- Jalankan migrate dan seeder sesuai dengan command dibawah. Pastikan database sudah dibuat di MySQL.
+    
+    ```bash
+    // migrate
+    npx sequelize db:migrate
+    // seeder
+    npx sequelize-cli db:seed:all
+    ```
+    
+- Jalankan command dibawah ini
+    
+    ```bash
+    npm start // production
+    npm run dev // development
+    ```
+    
+
+### Frontend
+
+- Instalasi awal project
+    
+    ```bash
+    cd frontend
+    npm install
+    ```
+    
+- Buat file `.env`  seperti contoh pada file `.env.example`
+- Jalankan command dibawah ini
+    
+    ```bash
+    npm start // production
+    npm run dev // development
+    ```
+    
+- Untuk menjalankan server backend dan frontend bersamaan
+    
+    ```bash
+    npm install
+    npm start
+    ```
+    
+- Untuk menjalankan masing-masing server tanpa pindah direktori
+    
+    ```bash
+    npm start:frontend
+    npm start:backend
+    ```
+    
+
+## API Endpoint
+
+Dokumentasi terkait API endpoint dapat dilihat melalui `http://localhost:<port>/api-docs` . Pastikan server backend sudah nyala
