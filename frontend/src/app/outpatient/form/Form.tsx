@@ -1,65 +1,15 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import { OutPatientRegistration } from '@/app/types/outpatient';
+import { Clinic } from '@/app/types/clinic';
+import { Doctor } from '@/app/types/doctor';
+import { TariffReference } from '@/app/types/tariffReference';
+import { Patient } from '@/app/types/patient/patient';
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
-interface Clinic {
-  id: number;
-  name: string;
-  code: string;
-}
-
-interface Doctor {
-  id: number;
-  name: string;
-  code: string;
-  clinic_id: number;
-}
-
-interface TariffReference {
-  id: number;
-  tariff_code: string;
-  category: string;
-  description: string;
-  base_registration_fee: number;
-  base_examination_fee: number;
-  is_active: boolean;
-}
-
-interface Patient {
-  id: number;
-  first_name: string;
-  last_name: number;
-  mr_number: string;
-}
-
-interface FormData {
-  register: {
-    patient_id: number;
-    session: 'Fullday' | 'Halfday'; // You can add more session types if necessary
-    notes: string;
-    visit_date: string;
-  };
-  service_detail: {
-    clinic_code: string;
-    doctor_code: string;
-  };
-  billing_detail: {
-    treatment: string;
-    discount: number;
-  };
-  visit_detail: {
-    class_type: 'NON' | 'CLASS_A' | 'CLASS_B'; // Adjust the types as needed
-    insurance_type: 'UMUM' | 'BPJS'; // Adjust the types as needed
-    insurance_number: string;
-    guarantor: string;
-    entry_method: 'Datang Sendiri' | 'Rujukan' | 'Online'; // Adjust the types as needed
-    tariff_code: string;
-  };
-}
-
 const OutpatientRegistrationForm: React.FC = () => {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<OutPatientRegistration>({
     register: {
       patient_id: 0,
       session: 'Fullday',
@@ -453,7 +403,7 @@ const OutpatientRegistrationForm: React.FC = () => {
             className="w-full p-2 border rounded shadow-sm mr-2 focus:ring-2 focus:ring-mint-400 focus:outline-none"
           >
             <option value="Datang Sendiri">Datang Sendiri</option>
-            <option value="Rujukan">Rujukan</option>
+            <option value="Online">Online</option>
           </select>
         </div>
         <div>

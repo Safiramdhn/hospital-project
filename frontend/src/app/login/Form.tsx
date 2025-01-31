@@ -20,7 +20,7 @@ const LoginFormComponent: React.FC = () => {
         localStorage.setItem('Authorization', token);
 
         // Redirect to outpatient registration page
-        window.location.href = '/outpatient-registration-form';
+        window.location.href = '/outpatient/form';
       } else if (response.data && response.data.message) {
         alert(response.data.message);
         setEmail('');

@@ -3,37 +3,14 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 
+import { OutPatientFilter, OutPatient } from '../types/outpatient';
+
 const apiURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
-interface OutPatientRegistrationInput {
-  registrationNumber: string;
-  bookingNumber: string;
-  patientName: string;
-  doctorName: string;
-  clinicName: string;
-}
-
-interface OutPatients {
-  patient: {
-    first_name: string;
-    last_name: string;
-    mr_number: string;
-  };
-  doctor: {
-    name: string;
-  };
-  clinic: {
-    name: string;
-  };
-  registration_number: string;
-  booking_number: string;
-  visit_date: string;
-}
-
 const OutpatientList: React.FC = () => {
-  const [data, setData] = useState<OutPatients[]>([]);
+  const [data, setData] = useState<OutPatient[]>([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState<OutPatientRegistrationInput>({
+  const [search, setSearch] = useState<OutPatientFilter>({
     registrationNumber: '',
     bookingNumber: '',
     patientName: '',

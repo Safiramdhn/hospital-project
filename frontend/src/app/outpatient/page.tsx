@@ -2,7 +2,7 @@
 import React from 'react';
 import MainHeaderComponent from '../components/Header';
 import SideBarComponent from '../components/Sidebar';
-import OutpatientRegistrationForm from './OutpatientRegisterForm';
+import OutpatientList from './List';
 import useAuth from '../hooks/Auth';
 
 const OutpatientRegistrationPage = () => {
@@ -24,7 +24,7 @@ const OutpatientRegistrationPage = () => {
 
                 {/* Scrollable Main Content */}
                 <div className="flex-1 overflow-auto p-6">
-                    <OutpatientRegistrationForm />
+                    <OutpatientList />
                 </div>
             </div>
         </div>

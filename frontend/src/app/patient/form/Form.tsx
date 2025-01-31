@@ -2,6 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
+import { Patient } from '@/app/types/patient/patient';
+import { PersonalInformation } from '@/app/types/patient/personalInformation';
+import { SocialData } from '@/app/types/patient/socialData';
+import { EmergencyContact } from '@/app/types/patient/emergencyContact';
+
 const apiURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
 interface Input {
@@ -11,47 +16,47 @@ interface Input {
   emergency_contact?: EmergencyContact;
 }
 
-interface Patient {
-  id?: number;
-  mr_number?: string;
-  ktp_number?: string;
-  first_name?: string;
-  last_name?: string;
-  active_status?: boolean;
-  mother_name?: string;
-  employee_id: number ;
-}
+// interface Patient {
+//   id?: number;
+//   mr_number?: string;
+//   ktp_number?: string;
+//   first_name?: string;
+//   last_name?: string;
+//   active_status?: boolean;
+//   mother_name?: string;
+//   employee_id: number ;
+// }
 
-interface PersonalInformation {
-  birth_place?: string;
-  birth_date?: string;
-  gender?: string;
-  blood_type?: string;
-  maritial_status?: string;
-  religion?: string;
-  contact_number?: string;
-  email?: string;
-  id_type?: string;
-  id_number: string;
-  employeer?: string;
-  education?: string;
-}
+// interface PersonalInformation {
+//   birth_place?: string;
+//   birth_date?: string;
+//   gender?: string;
+//   blood_type?: string;
+//   maritial_status?: string;
+//   religion?: string;
+//   contact_number?: string;
+//   email?: string;
+//   id_type?: string;
+//   id_number: string;
+//   employeer?: string;
+//   education?: string;
+// }
 
-interface SocialData {
-  address?: string;
-  city?: string;
-  postal_code?: string;
-  mr_date: string;
-  weight?: number;
-  ethnicity?: string;
-}
+// interface SocialData {
+//   address?: string;
+//   city?: string;
+//   postal_code?: string;
+//   mr_date: string;
+//   weight?: number;
+//   ethnicity?: string;
+// }
 
-interface EmergencyContact {
-  contact_name?: string;
-  phone_number?: string;
-  address?: string;
-  city?: string;
-}
+// interface EmergencyContact {
+//   contact_name?: string;
+//   phone_number?: string;
+//   address?: string;
+//   city?: string;
+// }
 
 const PatientForm: React.FC = () => {
   const router = useRouter();
@@ -61,21 +66,61 @@ const PatientForm: React.FC = () => {
 
   const [input, setInput] = useState<Input>({
     patient: {
-      employee_id:0
+      employee_id: 0,
+      id: 0,
+      mr_number: '',
+      ktp_number: '',
+      first_name: '',
+      last_name: '',
+      active_status: false,
+      mother_name: '',
+      createdAt: '',
+      updatedAt: '',
+      employee: {
+        name: ''
+      },
+      personal_information: undefined,
+      social_data: undefined,
+      emergency_contact: undefined
     },
     personal_information: {
-      id_number:'',
-      gender:'Laki-laki',
-      blood_type:'A',
-      maritial_status:'Single',
-      religion:'Islam',
-      id_type:'KTP',
+      id_number: '',
+      gender: 'Laki-laki',
+      blood_type: 'A',
+      maritial_status: 'Single',
+      religion: 'Islam',
+      id_type: 'KTP',
       education: 'SD',
+      id: 0,
+      patient_id: 0,
+      birth_place: '',
+      birth_date: '',
+      contact_number: '',
+      email: '',
+      employeer: ''
     },
     social_data: {
       mr_date: '',
+      id: 0,
+      patient_id: 0,
+      address: '',
+      city: '',
+      postal_code: '',
+      weight: 0,
+      ethnicity: '',
+      createdAt: '',
+      updatedAt: ''
     },
-    emergency_contact: {},
+    emergency_contact: {
+      id: 0,
+      patient_id: 0,
+      contact_name: '',
+      phone_number: '',
+      address: '',
+      city: '',
+      createdAt: '',
+      updatedAt: ''
+    },
   });
 
   const [loading, setLoading] = useState(false);
