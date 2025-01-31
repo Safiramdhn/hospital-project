@@ -63,7 +63,10 @@ const getAllOutPatientRegistration = async (req, res) => {
   let filter = {};
 
   if (patient_name) {
-    filter['$patient.first_name$'] = { [Op.like]: `%${patient_name}%` };
+    filter[Op.or] = [
+      { '$patient.first_name$': { [Op.like]: `%${patient_name}%` } },
+      { '$patient.last_name$': { [Op.like]: `%${patient_name}%` } },
+    ];
   }
   if (doctor_name) {
     filter['$service_detail.doctor.name$'] = { [Op.like]: `%${doctor_name}%` };
